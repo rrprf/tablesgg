@@ -1,0 +1,2 @@
+condition,fill,fill_alpha,border_size,border_color,comment
+NA,gray85,1,0.5,NA,# NA or blank 'condition' field matches any block

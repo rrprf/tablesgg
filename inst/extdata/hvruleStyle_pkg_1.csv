@@ -1,0 +1,14 @@
+block_condition,side,adjacent_condition,linetype,size,color,alpha,space,fill,fill_alpha,comment
+"type == ""titles""",bottom,"type == ""colhead_and_stub""",0,0.4,black,1,3,NA,1,# between title/subtitle and column header
+"type == ""titles""",bottom,"type == ""rowhead_and_body""",1,0.4,black,1,3,NA,1,# between title/subtitle and table body (if no column header)
+"type == ""colhead_and_stub""",bottom,NA,1,0.4,black,1,2,NA,1,# below column header/rowheadLabels
+"type == ""rowhead_and_body""",bottom,NA,1,0.4,black,1,3,NA,1,# at bottom of table if no foot is present.  before foot if present
+"type == ""colblock"" & subtype == ""A"" & headlayer > 1",bottom,NA,1,0.3,black,1,1.5,NA,1,"# between layers of column headers, separately for each level within a layer"
+"type == ""rowblock"" & subtype == ""C"" & headlayer > 1 & nr > 1",bottom,"type == ""rowblock"" & subtype == ""C"" & headlayer > 1",0,0.3,black,1,1.5,NA,1,# between multi-row row blocks defined by levels of row headers at layers 2 and higher
+"type == ""rowblock"" & subtype == ""C"" & headlayer > 1",bottom,"type == ""rowblock"" & subtype == ""C"" & headlayer > 1 & nr > 1",0,0.3,black,1,1.5,NA,1,# between multi-row row blocks defined by levels of row headers at layers 2 and higher
+"type == ""rowblock"" & subtype == ""A"" & headlayer == 0",top,NA,0,0.3,black,1,1,NA,1,# above an interior row header
+"type == ""rowblock"" & subtype == ""A"" & headlayer == 0",bottom,NA,0,0.3,black,1,1,NA,1,# below an interior row header
+"type == ""rowblock"" & subtype == ""G""",bottom,"type == ""rowblock"" & subtype == ""G""",0,0.3,black,1,1.5,NA,1,# between groups of rows within a row header level (number of rows per group set by rowgroupSize)
+"type == ""rowblock"" & subtype == ""A"" & headlayer == 1",right,NA,0,0.4,black,1,2.5,NA,1,# between innermost column of row headers and table body
+"type == ""colblock"" & subtype == ""C"" & headlayer > 1 & nc > 1",right,"type == ""colblock"" & subtype == ""C"" & headlayer > 1",0,0.3,black,1,2.5,NA,1,# between column blocks defined by levels of column headers at layers 2 and higher
+"type == ""colblock"" & subtype == ""C"" & headlayer > 1",right,"type == ""colblock"" & subtype == ""C"" & headlayer > 1 & nc > 1",0,0.3,black,1,2.5,NA,1,# between column blocks defined by levels of column headers at layers 2 and higher

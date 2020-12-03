@@ -1,0 +1,10 @@
+# Files that git should ignore
+# An alternative (personal, non-tracked) location for this information is 
+# .git/info/exclude
+# 30 Aug 2018
+.RData
+*.[Rr]wrk
+# Ignore editor backup files:
+*.$$$
+*~
+

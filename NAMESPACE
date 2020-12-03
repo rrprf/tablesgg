@@ -1,0 +1,36 @@
+# NAMESPACE file for package 'tablesgg'
+# 27 Nov 2020 / Richard Raubertas
+export("[.textTable", "acol", "addBlock", "addHvrule", "addRefmark",      
+            "adim", "arow", 
+            "element_block", "element_entry", "element_hvrule",          
+            "element_refmark", "elements", "ids",
+            "plot.tabular", "plot.textTable", "pltdSize", 
+            "print.pltdTable", "props<-", "propsa<-", "propsd<-", "styleObj", 
+            "summary.pltdTable", "summary.textTable", 
+            "tablesggOpt", "tablesggSetOpt", 
+            "textTable", "textTable.data.frame", "textTable.ftable", 
+            "textTable.table", "textTable.tabular", "textTable.xtable", 
+            "textTable.xtableList", "update.pltdTable", "update.textTable")
+import(ggplot2, tables, grDevices, grid)
+importFrom(graphics, plot)
+importFrom(utils, data, read.csv, str, head, tail, assignInMyNamespace)
+importFrom(stats, update, ftable, xtabs, setNames)
+importFrom(tools, assertError, assertWarning)
+S3method('[', textTable)
+S3method(plot, textTable)
+S3method(plot, tabular)
+S3method(plot, pltdTable)
+S3method(print, pltdTable)
+S3method(summary, pltdTable)
+S3method(summary, textTable)
+S3method(print, summary.pltdTable)
+S3method(print, summary.textTable)
+S3method(update, textTable)
+S3method(update, pltdTable)
+S3method(textTable, default)
+S3method(textTable, data.frame)
+S3method(textTable, ftable)
+S3method(textTable, table)
+S3method(textTable, tabular)
+S3method(textTable, xtable)
+S3method(textTable, xtableList)
