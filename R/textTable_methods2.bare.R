@@ -1,4 +1,4 @@
-#===== Source file: ../textTable_methods2.r on 2020-11-29
+#===== Source file: ../textTable_methods2.r on 2021-06-02
 #-----
 
 textTable.tabular <- function(x, title=character(0), subtitle=character(0), 

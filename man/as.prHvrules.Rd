@@ -1,5 +1,5 @@
 % Auto-generated documentation for function as.prHvrules 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{as.prHvrules}
 \alias{as.prHvrules}
 \title{Promote a Data Frame to a \code{prhvrules} Object }
@@ -13,13 +13,9 @@ as.prHvrules(x)
 }
 \arguments{
   \item{x}{An object inheriting from \code{data.frame}.  Each row represents one
-horizontal or vertical rule (hvrule) to apppear in a table.  Columns must
-include \code{id} (character, a unique identifier for each hvrule);
-\code{direction} (character, either "hrule" or "vrule"); \code{arow1},
-\code{arow2}, \code{acol1}, \code{acol2} (numeric position of the hvrule
-within the table, in terms of row and column numbers); \code{enabled}
-(logical, whether the hvrule should be displayed); and all the graphical
-properties required to display an hvrule (see \code{grProps}).
+horizontal or vertical rule (hvrule) to apppear in a table.  See
+\code{dfSpecs} for the required columns and types, and \code{prHvrules}
+for a description of these columns.
   }
 }
 \value{

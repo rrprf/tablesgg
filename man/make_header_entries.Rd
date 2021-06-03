@@ -1,5 +1,5 @@
 % Auto-generated documentation for function make_header_entries 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{make_header_entries}
 \alias{make_header_entries}
 \title{Convert a Matrix of Headers to Table Entries, with Merging of Runs }

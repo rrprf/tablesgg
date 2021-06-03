@@ -1,4 +1,4 @@
-#===== Source file: ../prHvrules.r on 2020-11-29
+#===== Source file: ../prHvrules.r on 2021-06-02
 #-----
 
 prHvrules <- function(x, style=tablesggOpt("hvruleStyle"), scale=1.0)
@@ -15,15 +15,16 @@ prHvrules <- function(x, style=tablesggOpt("hvruleStyle"), scale=1.0)
   if (nrow(x) == 0) {
     hvrules <- as.prHvrules(NULL)  # empty data frame
   } else {
-    hvrules <- apply_style(x, style=style, replace=TRUE, scale=scale, 
+    hvrules <- apply_style(x, style=style, replace=TRUE, 
                            setEnabled=TRUE, unstyled="base", 
-                           base_style=tablesgg::styles_pkg$hvruleStyle_pkg_base)
+                           base_style=styles_pkg$hvruleStyle_pkg_base)
     # Disable any hvrules associated with blocks that do not contain any 
     # enabled entries.
     if ("had_enabled_entries" %in% names(x)) {
       disable <- !x[hvrules[, "block"], "had_enabled_entries"]
       hvrules[disable, "enabled"] <- FALSE
     }
+    hvrules <- apply_scale(hvrules, type="hvrule", scale=scale)
   }
 
   hvrules <- structure(hvrules, row.names=hvrules[, "id"], current_scale=scale, 

@@ -1,5 +1,5 @@
 % Auto-generated documentation for function styleObj 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{styleObj}
 \alias{styleObj}
 \title{Create a Style Object }
@@ -10,7 +10,7 @@ when displaying the elements.  Styles allow assignment of graphical
 properties to be based on element descriptors.
 }
 \usage{
-styleObj(x, type, scalable_properties, match_columns=character(0))
+styleObj(x, type, match_columns=character(0))
 }
 \arguments{
   \item{x}{Data frame with (a) column(s) that specify patterns to be used to identify
@@ -22,11 +22,6 @@ will be read to create such a data frame.
   \item{type}{Character string, one of "entry", "hvrule", or "block".  This specifies
 the type of element to which the style will apply.
   }
-  \item{scalable_properties}{Optional character vector (possibly empty) specifying the graphical
-properties that are to be modified when changing the displayed size of a
-table by a scale factor.  If not provided, a set of default properties
-(depending on \code{type}) will be used.
-  }
   \item{match_columns}{Optional character vector (possibly empty) with the names of element
 descriptors that are required in order to evaluate the subset selector
 expressions in \code{x}.  See DETAILS.
@@ -36,9 +31,8 @@ expressions in \code{x}.  See DETAILS.
 An object of S3 classes \code{styleObj} and \code{data.frame}.  It will
 have the same number of rows and all the columns in \code{x}.
 
-The object will have attributes \code{element_type},
-\code{scalable_properties} and \code{match_columns}, equal to the
-corresponding arguments.
+The object will have attributes \code{element_type} and
+\code{match_columns}, equal to the corresponding arguments.
 }
 \details{
 A style specifies graphical properties to be used in displaying one of the

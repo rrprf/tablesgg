@@ -1,5 +1,5 @@
 % Auto-generated documentation for function element_refmark 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{element_refmark}
 \alias{element_refmark}
 \title{Specify a Reference Mark that can be Added to Table Entries }
@@ -26,8 +26,8 @@ characters.
   \item{...}{Additional arguments passed to \code{element_entry}.  These can be used to
 set other graphical properties of table entries at the same time as
 setting the reference mark.  However it is an error to set \code{text} or
-\code{math} to anything other than NULL, since they are used internally by
-this function.
+\code{textspec} to anything other than NULL, since they are used
+internally by this function.
   }
   \item{inherit.blank}{Ignored.
   }

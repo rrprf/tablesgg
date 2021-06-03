@@ -1,5 +1,5 @@
 % Auto-generated documentation for function as.tblBlocks 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{as.tblBlocks}
 \alias{as.tblBlocks}
 \title{Promote a Data Frame to a \code{tblblocks} Object }
@@ -11,11 +11,9 @@ function not intended to be called by package users.
 as.tblBlocks(x)
 }
 \arguments{
-  \item{x}{A data frame, with each row representing one table block.  It must include
-columns \code{id} (unique identifier for the block); \code{nr}, \code{nc}
-(number of table rows, columns occupied by the block); \code{arow1},
-\code{arow2}, \code{acol1}, \code{acol2} (first and last row numbers,
-column numbers in the table occupied by the block).
+  \item{x}{A data frame, with each row representing one table block.  See
+\code{dfSpecs} for the required columns and types, and \code{tblBlocks}
+for a description of these columns.
   }
 }
 \value{

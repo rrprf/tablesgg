@@ -1,5 +1,5 @@
 % Auto-generated documentation for function element_hvrule 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{element_hvrule}
 \alias{element_hvrule}
 \title{Specify Visual Properties for Table Rules }

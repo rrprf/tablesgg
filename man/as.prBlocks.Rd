@@ -1,5 +1,5 @@
 % Auto-generated documentation for function as.prBlocks 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{as.prBlocks}
 \alias{as.prBlocks}
 \title{Promote a Data Frame to a \code{prblocks} Object }
@@ -14,8 +14,9 @@ as.prBlocks(x)
 \arguments{
   \item{x}{An object inheriting from \code{data.frame}.  Each row represents one
 table block (a rectangular set of table cells).  Columns must include all
-those required for a \code{tblBlocks} object, plus all the graphical
-properties required to display a block (see \code{grProps}).
+those required for a \code{tblBlocks} object (see \code{dfSpecs}), plus
+all the graphical properties required to display a block (see
+\code{grSpecs}).
   }
 }
 \value{
@@ -34,7 +35,7 @@ row and column numbers in the augmented row-column grid of the table; see
 \code{adim} for more information.
 
 The graphical properties required for a plot-ready block, and their types,
-are defined in object \code{grProps}.
+are defined in object \code{grSpecs}.
 
 If column \code{enabled} was not present in \code{x} it will be added,
 with value FALSE for all blocks.  Attributes \code{current_scale},

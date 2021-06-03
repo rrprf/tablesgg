@@ -1,5 +1,5 @@
 % Auto-generated documentation for function prBlocks 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{prBlocks}
 \alias{prBlocks}
 \title{Assign Graphical Properties to Table Blocks }

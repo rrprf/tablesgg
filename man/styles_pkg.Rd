@@ -24,7 +24,9 @@
     \item{\code{entryStyle_pkg_null}, \code{blockStyle_pkg_null}, 
       \code{hvruleStyle_pkg_null}}{"Null" styles designed to not 
       match any element, and thus not assign graphical properties to any 
-      element.  They are intended for internal use only.}
+      element.  Using the null style for hvrules is a way to disable all 
+      hvrules when the plot is created (rather than afterwards using 
+      a \code{props<-} function).}
   }
 }
 \seealso{\code{\link{styleObj}}, \code{\link{tablesggOpt}}}

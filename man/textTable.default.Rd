@@ -1,5 +1,5 @@
 % Auto-generated documentation for function textTable.default 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{textTable.default}
 \alias{textTable.default}
 \title{Create a \code{texttable} Object from a Suitable List}
@@ -16,7 +16,9 @@ called by package users.
 }
 \arguments{
   \item{x}{A list with components for each of the table parts.  See \code{?textTable}
-for a description of the table components.
+for a description of the table components.  May also be an atomic vector,
+which will be converted to a 1-column matrix and passed to the
+\code{matrix} method.
   }
   \item{...}{Ignored, with a warning.  (Present for compatibility with the generic.)
   }

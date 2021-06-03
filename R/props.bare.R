@@ -1,4 +1,4 @@
-#===== Source file: ../props.r on 2020-11-29
+#===== Source file: ../props.r on 2021-06-02
 #-----
 
 'propsa<-' <- function(x, arows=NULL, acols=NULL, setEnabled=TRUE, value)
@@ -162,12 +162,11 @@ props_mod <- function(x, value, id=NULL, e=NULL, arows=NULL, acols=NULL,
   if (setEnabled)  xInfo[idx, "enabled"] <- TRUE  # will be overridden if  
      # there is an explicit 'enabled' in 'newprops'.
   if (inherits(value, "element_refmark")) {
-    raise <- value[["raise"]]
-    xInfo[idx, "text"] <- add_refmark(xInfo[idx, "text"], 
-                                      is_math=xInfo[idx, "math"], 
-                                      mark=value[["mark"]], 
-                                      side=value[["side"]], raise=raise)
-    if (raise)  xInfo[idx, "math"] <- TRUE
+    temp <- add_refmark(xInfo[idx, "text"], textspec=xInfo[idx, "textspec"], 
+                        mark=value[["mark"]], side=value[["side"]], 
+                        raise=value[["raise"]])  # list
+    xInfo[idx, "text"] <- temp$text
+    xInfo[idx, "textspec"] <- temp$textspec
     value <- attr(value, "extra")  # optional 'element_entry'
     stopifnot(is.null(value) || inherits(value, "element_entry"))
   }
@@ -180,14 +179,14 @@ props_mod <- function(x, value, id=NULL, e=NULL, arows=NULL, acols=NULL,
     if (length(chk) > 0)  stop(
       "Following graphical properties (to be updated) not found in 'x': ", 
       toString(chk))
-    # When modifying entry text, in the absence of an explicit 'math' setting, 
-    # look for 'MATH_' prefix in the new value for entry text:
+    # When modifying entry text, in the absence of an explicit 'textspec' 
+    # setting, look for special prefix in the new value for entry text:
     if (xtype == "entry" && ("text" %in% names(newprops)) && 
-        !("math" %in% names(newprops))) {
-      if (grepl("^MATH_", newprops[["text"]])) {
-        newprops[["text"]] <- sub("^MATH_", "", newprops[["text"]])
-        newprops <- c(newprops, list(math=TRUE))
-      }
+        !("textspec" %in% names(newprops))) {
+      textspec <- spec_from_text(newprops[["text"]])
+      # Remove special prefixes:
+      newprops[["text"]] <- prefix_text(newprops[["text"]], action="remove")
+      newprops <- c(newprops, list(textspec=textspec))
     }
     for (nm in names(newprops)) {
       newprop <- newprops[[nm]]
@@ -198,7 +197,7 @@ props_mod <- function(x, value, id=NULL, e=NULL, arows=NULL, acols=NULL,
       }
     }
     # 'style_row' is no longer valid for elements with updated graphical props.
-    if (any(names(newprops) %in% names(grProps()[[xtype]])) && 
+    if (any(names(newprops) %in% row.names(grSpecs(xtype))) && 
         "style_row" %in% names(xInfo)) {
       xInfo[idx, "style_row"] <- NA_integer_
     }

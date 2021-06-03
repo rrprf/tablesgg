@@ -1,9 +1,8 @@
-#===== Source file: ../entries_by_block.r on 2020-11-29
+#===== Source file: ../entries_by_block.r on 2021-06-02
 #-----
 
 entries_by_block <- function(x, blocks, strict)
 {
-  #x <- as.tblEntries(x)  # validity checks
   rslt <- rep(list(integer(0)), nrow(blocks))
   names(rslt) <- blocks$id
   naF <- function(y) { ifelse(is.na(y), FALSE, y) }

@@ -1,5 +1,5 @@
 % Auto-generated documentation for function element_entry 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{element_entry}
 \alias{element_entry}
 \title{Specify Visual Properties for Table Entries and their Cells }
@@ -12,7 +12,8 @@ element_entry(text=NULL, family=NULL, fontface=NULL, colour=NULL,
     alpha=NULL, size=NULL, hjust=NULL, vjust=NULL, angle=NULL, 
     lineheight=NULL, color=NULL, hpad=NULL, vpad=NULL, fill=NULL, 
     fill_alpha=NULL, border_size=NULL, border_colour=NULL, 
-    border_color=NULL, enabled=NULL, math=NULL, inherit.blank=FALSE)
+    border_color=NULL, minwidth=NULL, maxwidth=NULL, enabled=NULL, 
+    textspec=NULL, inherit.blank=FALSE)
 }
 \arguments{
   \item{text}{Scalar character string, the text to be displayed for the entries.
@@ -31,12 +32,24 @@ These will be passed to \code{ggplot2::geom_rect} under the names
   }
   \item{colour, border_colour}{Aliases for \code{color}, \code{border_color}.
   }
+  \item{minwidth, maxwidth}{Minimum, maximum width for cell(s) spanned by an entry.  Positive values
+represent absolute sizes in millimeters, and should include any padding.
+Negative values are interpreted as multiples of the natural width of the
+entry text, without padding.  Use values of \code{-1} for \code{minwidth}
+and \code{Inf} for \code{maxwidth} to prevent text wrapping.  Values
+closer to 0 encourage wrapping.  See \code{?elements} for more information
+and restrictions on these properties.
+  }
   \item{enabled}{Logical scalar, controlling whether the entry is displayed (TRUE) or not
 (FALSE).  This applies to both the entry text and the cells that contain
 it.
   }
-  \item{math}{Logical scalar.  If TRUE the entry text will be treated as a
-\code{plotmath} expression rather than simple text.
+  \item{textspec}{Character string indicating any special features of the text in
+\code{text}.  Currently supported values are "plain", "plotmath", and
+"markdown".  "plotmath" indicates that the entry text contains
+mathematical notation as described in \code{?plotmath}.  "markdown" means
+the text may contain markdown or HTML tags to control its appearance; this
+requires the \code{ggtext} package.
   }
   \item{inherit.blank}{Ignored.
   }
@@ -65,11 +78,10 @@ the justification is with respect to an (x, y) point.  Note that padding
 \code{hjust=0} will put the text at a distance \code{hpad} from the left
 border of its cell.
 
-Quantitative properties \code{size}, \code{angle}, \code{lineheight},
-\code{hpad}, \code{vpad}, and \code{border_size} may be specified using
-the \code{ggplot2} function \code{rel()}.  This function indicates that
-the value is to be interpreted as a multiplier to be applied to whatever
-the current value of the property is.  For example
+Quantitative properties (\code{size}, \code{lineheight}, \code{hpad}, etc)
+may be specified using the \code{ggplot2} function \code{rel()}.  This
+function indicates that the value is to be interpreted as a multiplier to
+be applied to whatever the current value of the property is.  For example
 \code{lineheight=rel(1.2)} specifies that the lineheight property of an
 entry is to be increased by 20\% from its current value.
 }

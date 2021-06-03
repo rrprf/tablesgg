@@ -1,5 +1,5 @@
 % Auto-generated documentation for function textTable.xtable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{textTable.xtable}
 \alias{textTable.xtable}
 \title{Create a \code{texttable} from an \code{xtable} Object }

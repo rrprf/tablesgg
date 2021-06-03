@@ -1,5 +1,5 @@
 % Auto-generated documentation for function prTable.prEntries 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{prTable.prEntries}
 \alias{prTable.prEntries}
 \title{Create a Plot-Ready Table from Plot-Ready Entry, Block, and Hvrule Objects }

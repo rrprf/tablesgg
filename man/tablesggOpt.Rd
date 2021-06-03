@@ -1,5 +1,5 @@
 % Auto-generated documentation for function tablesggOpt 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{tablesggOpt}
 \alias{tablesggOpt}
 \title{Get or Reset Package Options }
@@ -21,7 +21,9 @@ tablesggOpt(x=NULL, reset=FALSE)
 If \code{x} is the name of a single package option, the value of that
 option.  Otherwise, a named list with the current values of all package
 options.  In both cases the result is after resetting if \code{reset} is
-TRUE, and is returned invisibly.
+TRUE.
+
+The result is invisible if \code{reset} is TRUE.
 
 The available options are documented in \code{?tablesggSetOpt}.
 }

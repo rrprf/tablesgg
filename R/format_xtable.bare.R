@@ -1,4 +1,4 @@
-#===== Source file: ../format_xtable.r on 2020-11-29
+#===== Source file: ../format_xtable.r on 2021-06-02
 #-----
 
 format_xtable <- function(x, row.names=TRUE, na="NA", mathExponents=TRUE, ...)

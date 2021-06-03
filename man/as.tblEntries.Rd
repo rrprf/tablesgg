@@ -1,5 +1,5 @@
 % Auto-generated documentation for function as.tblEntries 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{as.tblEntries}
 \alias{as.tblEntries}
 \title{Promote a Data Frame to a \code{tblentries} Object }
@@ -13,10 +13,10 @@ as.tblEntries(x)
 \arguments{
   \item{x}{An object inheriting from \code{data.frame}.  Each row represents one
 table entry, with information about its content, location, and structural
-role in the table.  Columns must include \code{id}, \code{part},
-\code{partrow}, \code{partcol}, \code{headlayer}, \code{level_in_layer},
-\code{text}, \code{arow1}, \code{arow2}, \code{acol1}, \code{acol2}.  See
-\code{tblEntries} for a description of these columns.
+role in the table.  See \code{dfSpecs} for the required columns and types,
+and \code{tblEntries} for a description of these columns.  \code{x} must
+also have attributes \code{rowhier} and \code{colhier} with information
+about the row and column header hierarchies (see \code{headerRuns}).
   }
 }
 \value{
@@ -36,6 +36,6 @@ validity checks.  If \code{x} is NULL, a valid but empty \code{tblEntries}
 object is returned.
 }
 \seealso{
-\code{\link{tblEntries}}
+\code{\link{tblEntries}}, \code{\link{headerRuns}}
 }
 \keyword{internal}

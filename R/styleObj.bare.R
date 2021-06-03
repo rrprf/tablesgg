@@ -1,18 +1,13 @@
-#===== Source file: ../styleObj.r on 2020-11-29
+#===== Source file: ../styleObj.r on 2021-06-02
 #-----
 
-styleObj <- function(x, type, scalable_properties, match_columns=character(0))
+styleObj <- function(x, type, match_columns=character(0))
 {
   if (is.character(x))  x <- read.csv(x, stringsAsFactors=FALSE)
   if (!is.data.frame(x))  stop(
     "'x' is not a data frame, or a file containing one")
   type <- match.arg(type, c("entry", "hvrule", "block"))
-  
-  if (missing(scalable_properties) || is.null(scalable_properties)) {
-    scalable_properties <- list("entry"=c("size", "hpad", "vpad", "border_size"), 
-                                "block"=character(0), 
-                                "hvrule"=c("space"))[[type]]
-  }
+  grspecs <- grSpecs(type)  # data frame, one row per prop
   
   if (type == "entry") {
     selectors <- "condition"
@@ -44,18 +39,12 @@ styleObj <- function(x, type, scalable_properties, match_columns=character(0))
   if (!is.character(match_columns) || anyNA(match_columns)) stop(
     "'match_columns' must be a character vector, without NA values")
 
-  properties <- names(grProps()[[type]])
+  properties <- row.names(grspecs)
   if (any(chk <- !(properties %in% names(x)))) stop(
     "Following graphical properties are not present in 'x': ", 
     toString(properties[chk]))
 
-  if (any(chk <- !(scalable_properties %in% properties))) stop(
-    "Following scalable properties are not valid properties: ", 
-    toString(scalable_properties[chk]))
-  
-  structure(x, element_type=type, 
-            scalable_properties=scalable_properties, 
-            match_columns=match_columns, 
+  structure(x, element_type=type, match_columns=match_columns, 
             class=c("styleObj", "data.frame"))
 }
 

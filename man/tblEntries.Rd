@@ -1,5 +1,5 @@
 % Auto-generated documentation for function tblEntries 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{tblEntries}
 \alias{tblEntries}
 \title{Assemble Information About Each Entry in a Table into a Data Frame }
@@ -49,10 +49,11 @@ of \code{x}, and may be NA for unknown or unspecified type.  The default
 for table annotation (\code{title}, \code{subtitle}, \code{foot}) and
 \code{rowheadLabels} is "character".
   }
-  \item{math}{Logical indicating whether entry text is to be parsed into an expression
-before being displayed.  The default is FALSE, but any entry whose text is
-a character string beginning with the characters "MATH_" will have
-\code{math} set to TRUE and the leading "MATH_" removed.
+  \item{textspec}{Character string indicating any special features of the text in
+\code{text}.  Currently supported values are "plain", "plotmath", and
+"markdown".  The default is "plain", but any entry whose text begins with
+"MATH_" or "MKDN_" will have \code{textspec} set to "plotmath" or
+"markdown", respectively, and the prefix will be removed from \code{text}.
   }
   \item{enabled}{Logical indicating whether the entry is to be displayed.  This function
 sets \code{enabled} to FALSE for entries whose \code{text} is NA (with a
@@ -64,7 +65,7 @@ warning) or the empty string "", and to TRUE for all other entries.
 if not.
   }
 Row names for the data frame are set equal to \code{id}.  The data frame
-has attributes \code{mergeRuns} and \code{rowheadInside}, set equal to the
+has attributes \code{mergeRuns} and \code{rowheadInside}, based on the
 arguments.  It also has attributes \code{rowhier} and \code{colhier},
 containing information about the row and column header hierarchies.  They
 are lists of data frames, copied from the corresponding components of
@@ -84,22 +85,22 @@ disabled by default; this is so that blocks containing only empty cells
 will not have hvrules generated for them.
 
 Row and column numbers used in creating default entry ID's are
-\code{partrow} and \code{partcol}, thus with respect to the dimensions of
-the table part the entry belongs to, not the augmented row-column grid.
+\code{partrow} and \code{partcol}, and thus with respect to the dimensions
+of the table part the entry belongs to, not the augmented row-column grid.
 If an entry spans more than one row or column, the minimum row/column
 number of the spanned cells is used.
 
 The \code{rowhier} and \code{colhier} attributes are included primarily to
 assist creation of table blocks by function \code{tblBlocks}.
 
-A \code{tblEntries} object can edited to modify individual entries if
-desired.  The function \code{as.tblEntries} can be used to create a
-\code{tblEntries} object from an ordinary data frame.
-
 The inclusion of the \code{hjust} column is not tidy, since it is really a
 graphical display property.  However it is needed to carry forward
 justification information that \code{x} may have inherited from a
 \code{tabular} object.
+
+The \code{tblEntries} method for \code{textTable} is the inverse of this
+function: it will re-create a \code{textTable} from a \code{tblEntries}
+object.
 }
 \seealso{
 \code{\link{textTable}}, \code{\link{tblParts}};

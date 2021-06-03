@@ -1,5 +1,5 @@
 % Auto-generated documentation for function update.prTable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{update.prTable}
 \alias{update.prTable}
 \title{Update a \code{prtable} (Plot-Ready Table) Object }
@@ -21,10 +21,9 @@ value of NULL leaves the corresponding style of \code{object} unchanged.
   }
   \item{scale}{Optional numeric multiplier used to increase or decrease the displayed
 size of table elements, relative to the natural size implied by their
-(updated) styles.  If it has length two, the first element applies to
-entries and blocks, and the second to hvrules.  The default is to use a
-value of 1.0 for element types with new styles, and to not change the
-scaling for element types whose styles are not updated.
+(possibly updated) styles.  If it has length two, the first element
+applies to entries and blocks, and the second to hvrules.  The default is
+to use the existing scale value(s) in \code{object}.
   }
   \item{...}{Ignored, with a warning.  (Included for compatibility with the generic.)
   }

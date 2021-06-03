@@ -1,5 +1,5 @@
 % Auto-generated documentation for function eval_conditions 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{eval_conditions}
 \alias{eval_conditions}
 \title{Evaluate a Set of Logical Conditions Within a Data Frame }

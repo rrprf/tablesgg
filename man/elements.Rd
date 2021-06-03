@@ -1,5 +1,5 @@
 % Auto-generated documentation for function elements 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{elements}
 \alias{elements}
 \title{Extract Table Elements from a Plotted Table }
@@ -81,18 +81,21 @@ it is just an integer from 1 to the number of entries in that layer of
 that part.} \item{multirow, multicolumn}{Logicals indicating whether the
 entry spans multiple rows or columns of the table.} \item{text}{Character
 string containing the formatted content of the entry, for display.  It may
-use \code{plotmath} notation for mathematical notation, see \code{math}
-below.} \item{type}{Character string identifying the type of value the
-entry represents (e.g., "numeric").  May be NA.  The default for table
-annotation (\code{title}, \code{subtitle}, \code{foot}) and
-\code{rowheadLabels} is "character".} \item{math}{Logical indicating
-whether entry text is to be parsed into an expression before being
-displayed; this allows mathematical notation as described in
-\code{?plotmath}.} \item{enabled}{Logical indicating whether the entry is
-to be displayed when the table is plotted.  If FALSE the entry is ignored
-when laying out the table or determining its size.} \item{arow1, arow2,
-acol1, acol2}{Range of row and column numbers occupied by an entry, with
-respect to the augmented row-column grid for the table.  \code{arow1} <
+use \code{plotmath} notation for mathematical notation, or markdown/HTML
+tags; see \code{textspec} below.} \item{type}{Character string identifying
+the type of value the entry represents (e.g., "numeric").  May be NA.  The
+default for table annotation (\code{title}, \code{subtitle}, \code{foot})
+and \code{rowheadLabels} is "character".} \item{textspec}{Character string
+indicating any special features of the text in \code{text}.  Currently
+supported values are "plain", "plotmath", and "markdown".  "plotmath"
+indicates that the entry text contains mathematical notation as described
+in \code{?plotmath}.  "markdown" means the text may contain markdown or
+HTML tags to control its appearance; this requires the \code{ggtext}
+package.} \item{enabled}{Logical indicating whether the entry is to be
+displayed when the table is plotted.  If FALSE the entry is ignored when
+laying out the table or determining its size.} \item{arow1, arow2, acol1,
+acol2}{Range of row and column numbers occupied by an entry, with respect
+to the augmented row-column grid for the table.  \code{arow1} <
 \code{arow2} and/or \code{acol1} < \code{acol2} means the entry spans
 multiple rows and/or columns.} }
 
@@ -123,7 +126,42 @@ in [0, 1] specifying transparency of the cell background color
 (0=transparent, 1=opaque).} \item{border_size}{Thickness of the border to
 draw around the cell(s) containing the entry text, in millimeters.}
 \item{border_color}{Character string; color for the border around entry
-text.  NA means no border.} }
+text.  NA means no border.} \item{minwidth, maxwidth}{Minimum and maximum
+width for the cell(s) spanned by the entry.  (Here \emph{width} is with
+respect to the text itself; i.e., the direction of reading for English
+text, and therefore measured vertically if the text is rotated by 90 or
+270 degrees.)  They may be expressed in two forms.  Positive values are
+interpreted as absolute widths in millimeters, and should include the
+amount of padding specified by \code{hpad} (when \code{angle} is 0 or 180
+degrees) or \code{vpad} (when \code{angle} is 90 or 270 degrees).
+Negative values are interpreted as multiples of the natural width of the
+text itself, \emph{without} including padding.  Thus setting
+\code{minwidth} for an entry to \code{-1} will guarantee that the width of
+the spanned cell(s) will be at least enough to contain the text without
+wrapping. \itemize{ \item An NA value for \code{minwidth} means there is
+no constraint on minimum width, and is equivalent to 0.  An \code{Inf}
+value for \code{maxwidth} means there is no constraint on maximum width.
+(However in the absence of constraints, the internal algorithm favors
+widths as close as possible to the natural width of the entry text,
+without wrapping.) \item An NA value for \code{maxwidth} means the maximum
+width will be determined passively from the \code{maxwidth} values of
+other entries in the same table column(s) (if \code{angle} is 0 or 180) or
+row(s) (if \code{angle} is 90 or 270).  (It will never be less than
+\code{minwidth}.) This may be useful for table titles and footnotes, where
+long text should be wrapped to fit widths implied by the other table
+entries. \item Setting \code{maxwidth} to NA or to a finite value \code{>
+-1} and \code{< Inf} means the spanned cell(s) may not be wide enough to
+hold the text without wrapping it into multiple lines.  Therefore option
+\code{tablesggOpt("allowWrap")} must be TRUE, and a warning will be raised
+and \code{maxwidth} will be ignored if not. \item The general effect of
+setting \code{minwidth} to a non-zero value is to reduce or prevent text
+wrapping, while the general effect of setting \code{maxwidth} to NA or a
+finite value is to encourage wrapping.  Settings for one entry may affect
+the width and wrapping of other entries, because column widths and row
+heights for the table as a whole must satisfy the constraints for all
+their entries. \item Text representing \code{plotmath} expressions cannot
+be wrapped, so \code{maxwidth} should be \code{Inf} or \code{<= -1} for
+such entries. } } }
 
 \strong{Columns in \code{elements(x, type="block")}}
 

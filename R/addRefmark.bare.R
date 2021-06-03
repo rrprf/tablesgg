@@ -1,4 +1,4 @@
-#===== Source file: ../addRefmark.r on 2020-11-29
+#===== Source file: ../addRefmark.r on 2021-06-02
 #-----
 
 addRefmark <- function(x, mark, before=character(0), after=character(0), 
@@ -13,25 +13,23 @@ addRefmark <- function(x, mark, before=character(0), after=character(0),
   if (missing(raise) || is.null(raise))  raise <- !grepl("^\\*+$", mark)
   # Define an internal function that searches a vector/matrix of text strings 
   # for matches to 'before' or 'after' and adds the reference mark.
-  add_mark <- function(txt, is_math) {
+  add_mark <- function(txt, txtspec) {
     # Defined by lexical scoping:  mark, before, after, raise
     addmark1 <- { if (length(before) == 0)  FALSE
                   else  grepl(before, txt, ...) }
     addmark2 <- { if (length(after) == 0)  FALSE 
                   else  grepl(after, txt, ...) }
     addmark <- addmark1 | addmark2
-    if (is.null(is_math)) {
-      is_math1 <- NULL
-      is_math2 <- NULL
-    } else {
-      is_math1 <- is_math[addmark1]
-      is_math2 <- is_math[addmark2]
-    }
-    txt[addmark1] <- add_refmark(txt[addmark1], is_math=is_math1, 
-                                 mark=mark, side="before", raise=raise)
-    txt[addmark2] <- add_refmark(txt[addmark2], is_math=is_math2, 
-                                 mark=mark, side="after", raise=raise)
-    list(text=txt, added_mark=addmark)
+    wrk <- add_refmark(txt[addmark1], textspec=txtspec[addmark1], mark=mark, 
+                       side="before", raise=raise)
+    txt[addmark1] <- wrk$text
+    txtspec[addmark1] <- wrk$textspec
+
+    wrk <- add_refmark(txt[addmark2], textspec=txtspec[addmark2], mark=mark, 
+                       side="after", raise=raise)
+    txt[addmark2] <- wrk$text
+    txtspec[addmark2] <- wrk$textspec
+    list(text=txt, textspec=txtspec)
   }
     
   if (inherits(x, "textTable")) {
@@ -40,12 +38,11 @@ addRefmark <- function(x, mark, before=character(0), after=character(0),
     for (i in partnames) {
       text <- x[[i]]
       if (is.null(text))  next
-      wrk <- add_mark(text, is_math=NULL)  # list
-      if (raise && any(chk <- (wrk$added_mark & grepl("\\n", text)))) {
-        warning(sum(chk), " cells in part '", i, "' of 'x' contain newlines, ", 
-                "which will not display correctly with a reference mark")
-      }
-      x[[i]] <- wrk$text
+      textspec <- spec_from_text(text)
+      text[] <- prefix_text(text, action="remove")
+      wrk <- add_mark(text, textspec)  # list
+      text[] <- prefix_text(wrk$text, spec=wrk$textspec, action="add")
+      x[[i]] <- text
     }
   } else if (inherits(x, "pltdTable")) {
     etbl <- entries(x, enabledOnly=FALSE)
@@ -57,15 +54,10 @@ addRefmark <- function(x, mark, before=character(0), after=character(0),
       stop("No 'part' information is available in 'x'")
     }
     text <- etbl[use, "text"]
-    is_math <- etbl[use, "math"]
-    wrk <- add_mark(text, is_math)  # list
-    if (raise && any(chk <- (wrk$added_mark & grepl("\\n", text)))) {
-      warning(sum(chk), " entries contain newlines, ", 
-              "which will not display correctly with a reference mark")
-    }
+    textspec <- etbl[use, "textspec"]
+    wrk <- add_mark(text, textspec)  # list
     etbl[use, "text"] <- wrk$text
-    if (raise)  is_math <- is_math | wrk$added_mark
-    etbl[use, "math"] <- is_math
+    etbl[use, "textspec"] <- wrk$textspec
     entries(x) <- etbl
   } else  stop("'x' is neither a 'textTable' nor 'pltdTable'")    
   x

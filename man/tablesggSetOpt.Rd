@@ -1,5 +1,5 @@
 % Auto-generated documentation for function tablesggSetOpt 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{tablesggSetOpt}
 \alias{tablesggSetOpt}
 \title{Set the Values of Package Options }
@@ -33,7 +33,19 @@ The options that may be set are:
 default style for hvrules.} \item{plot.margin}{A numeric vector of length
 4, containing the amount of empty space to add around the four sides of a
 plotted table, in millimeters.  The order of sides is top, right, bottom,
-left.} }
+left.} \item{allowMarkdown}{Logical scalar.  If TRUE then text for table
+entries is allowed to contain markdown and HTML tags to control its
+appearance.  TRUE is valid only if package \code{ggtext} is available.}
+\item{allowWrap}{Logical scalar.  If TRUE then automatic wrapping of text
+for table entries is allowed.  TRUE is valid only if packages
+\code{ggtext} and \code{quadprog} are available.} }
+
+Facilities to handle markdown and automatic wrapping of entry text are
+provided by Claus Wilke's \code{ggtext} package
+(https://CRAN.R-project.org/package=ggtext).  Therefore
+\code{allowMarkdown} and \code{allowWrap} can be set to TRUE only when
+that package has been installed.  Note that only a subset of HTML tags are
+available.
 }
 \seealso{
 \code{\link{tablesggOpt}} to get current values of options, or to reset
@@ -43,7 +55,7 @@ the set of package-provided table styles.
 \examples{
   oldopt <- tablesggOpt()
   tablesggOpt(reset=TRUE)
-  plt1 <- plot(iris2_tab, title="Factory-fresh default entry style")
+  plt1 <- plot(iris2_tab, title="Factory-fresh default styles")
   # Set new default style for table entries:
   tablesggSetOpt(entryStyle=styles_pkg$entryStyle_pkg_2)
   plt2 <- plot(iris2_tab, title="Changed default entry style")

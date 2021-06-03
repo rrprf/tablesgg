@@ -1,5 +1,5 @@
 % Auto-generated documentation for function print.summary.textTable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{print.summary.textTable}
 \alias{print.summary.textTable}
 \title{Print the Dimensions of a Table and Its Parts }

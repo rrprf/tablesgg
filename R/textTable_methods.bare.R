@@ -1,4 +1,78 @@
-#===== Source file: ../textTable_methods.r on 2020-11-29
+#===== Source file: ../textTable_methods.r on 2021-06-02
+#-----
+
+textTable.matrix <- function(x, rcnames=c(TRUE, TRUE), title=character(0), 
+                             subtitle=character(0), foot=character(0), na="NA", 
+                             ...)
+{
+  type <- typeof(x)
+  body <- format(x, ...)
+  nr <- nrow(body)
+  nc <- ncol(body)
+  if (length(na) > 0) {  # not NULL or character(0)
+    body[is.na(x)] <- na
+  }
+  body <- structure(body, 
+                    justification=array(NA_character_, dim=dim(body)),
+                    type=array(type, dim=dim(body)))
+  # (Leave decisions about horizontal justification to table style.)
+  
+  if (!(length(rcnames) == 2 && 
+        (is.logical(rcnames) || is.character(rcnames))))  stop(
+     "'rcnames' argument is not a logical or character vector of length 2")
+  dn <- dimnames(x)
+  dnn <- names(dn)
+  dn1 <- dn[[1]]
+  dn2 <- dn[[2]]
+  dnn1 <- { if (is.character(rcnames))  rcnames[1]  else  dnn[1] }
+  dnn2 <- { if (is.character(rcnames))  rcnames[2]  else  dnn[2] }
+  
+  if (isFALSE(rcnames[1]) || is.null(dn1)) {
+    rowhead <- matrix(character(0), nrow=nr, ncol=0)
+  } else {
+    rowhead <- matrix(dn1, ncol=1)
+    if (any(notANumber(rowhead))) {
+      just <- matrix(NA_character_, nrow=nr, ncol=1)
+      type <- "character"
+    } else {
+      just <- matrix("r", nrow=nr, ncol=1)
+      type <- "numeric"
+    }
+    if (!is.null(dnn1) && dnn1 != "") {
+      rowhead <- cbind(rep(dnn1, nr), rowhead)
+      just <- cbind(rep(NA_character_, nr), just)
+      type <- c("character", type)
+    }
+    rowhead <- structure(rowhead, justification=just, type=type)
+  }
+  rowheadLabels <- matrix(character(0), nrow=0, ncol=ncol(rowhead))
+  
+  if (isFALSE(rcnames[2]) || is.null(dn2)) {
+    colhead <- matrix(character(0), nrow=0, ncol=nc)
+  } else {
+    colhead <- matrix(dn2, nrow=1)
+    if (any(notANumber(colhead))) {
+      just <- matrix(NA_character_, nrow=1, ncol=nc)
+      type <- "character"
+    } else {
+      just <- matrix("r", nrow=1, ncol=nc)
+      type <- "numeric"
+    }
+    if (!is.null(dnn2) && dnn2 != "") {
+      colhead <- rbind(rep(dnn2, nc), colhead)
+      just <- rbind(rep(NA_character_, nc), just)
+      type <- c("character", type)
+    }
+    colhead <- structure(colhead, justification=just, type=type)
+  }
+
+  z <- list(title=title, subtitle=subtitle, rowhead=rowhead, 
+            rowheadLabels=rowheadLabels, colhead=colhead, body=body, foot=foot)
+  
+  # Use 'textTable.default' to finish up processing and for validity checks.
+  textTable(z)
+}
+
 #-----
 
 textTable.data.frame <- function(x, title=character(0), subtitle=character(0), 

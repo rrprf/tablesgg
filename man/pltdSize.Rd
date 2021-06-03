@@ -1,5 +1,5 @@
 % Auto-generated documentation for function pltdSize 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{pltdSize}
 \alias{pltdSize}
 \title{Width and Height of a \code{pltdtable} Object }

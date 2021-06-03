@@ -1,5 +1,5 @@
 % Auto-generated documentation for function arow 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{arow}
 \alias{arow}
 \title{Row Numbers Within the Augmented Row-Column Grid for a Table }

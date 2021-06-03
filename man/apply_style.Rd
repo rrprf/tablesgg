@@ -1,16 +1,14 @@
 % Auto-generated documentation for function apply_style 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{apply_style}
 \alias{apply_style}
-\title{Apply a Style/Scale to Table Elements }
+\title{Apply a Style to Table Elements }
 \description{
-Apply a style and/or scaling factor to assign graphical properties to
-table elements.  This is an internal function not intended to be called by
-package users.
+Apply a style to assign graphical properties to table elements.  This is
+an internal function not intended to be called by package users.
 }
 \usage{
-apply_style(x, style, replace, scale, setEnabled, unstyled, 
-    base_style)
+apply_style(x, style, replace, setEnabled, unstyled, base_style)
 }
 \arguments{
   \item{x}{A data frame containing table elements (entries, hvrules, or blocks).
@@ -24,9 +22,6 @@ values in existing graphical property columns are replaced with values
 from \code{style} (along with any missing columns).  If TRUE then existing
 columns will be entirely replaced.
   }
-  \item{scale}{Numeric multiplier used to increase or decrease the displayed size of
-elements, relative to the natural size implied by \code{style}.
-  }
   \item{setEnabled}{If TRUE then column \code{enabled} is set to TRUE for elements whose
 graphical properties are set (or would be set, if \code{replace} were
 TRUE) entirely or in part by \code{style}; i.e., elements that match a
@@ -38,7 +33,7 @@ does not provide graphical parameters (i.e., elements that do not match
 any style row).  One of "pass", "disable", "base", or "error".
   }
   \item{base_style}{A \code{styleObj} object that will be applied to unstyled elements when
-\code{unstyled="base"}.  This style should be guaranteed to match any
+\code{unstyled="base"}.  This style should be guaranteed to match every
 element; if it does not an error will be raised.
   }
 }
@@ -58,7 +53,7 @@ generated, one for each of the four sides of each block.  Then
 \code{style} will be used to assign graphical properties to those hvrules.
 
 The graphical properties available for an element, and their types, are
-defined in object \code{grProps}.
+defined in function \code{grSpecs} and documented in \code{?elements}.
 
 See \code{styleObj} for information about how a style is specified, and
 how it is applied to elements.  Note that individual style specifications
@@ -79,13 +74,8 @@ error is to make it easier to manually add blocks or hvrules by position
 only.  (Note that this is different from the case where the condition
 expression itself, before evaluation, is NA.  The latter is treated as
 evaluating to TRUE for all rows of \code{x}.)
-
-\code{scale} adjusts the size of table elements relative to the size
-specified in \code{style}.  Therefore it applies to elements that match a
-row in \code{style}, and to unmatched elements only when \code{unstyled}
-is "base".
 }
 \seealso{
-\code{\link{styleObj}}; \code{\link{grProps}}
+\code{\link{styleObj}}; \code{\link{grSpecs}}, \code{\link{apply_scale}}
 }
 \keyword{internal}

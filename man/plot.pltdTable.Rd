@@ -1,5 +1,5 @@
 % Auto-generated documentation for function plot.pltdTable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{plot.pltdTable}
 \alias{plot.pltdTable}
 \title{Display a \code{pltdtable} Object on a Graphics Device }

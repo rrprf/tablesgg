@@ -1,9 +1,8 @@
-#===== Source file: ../rowhead_inside.r on 2020-11-29
+#===== Source file: ../rowhead_inside.r on 2021-06-02
 #-----
 
-rowhead_inside <- function(x)
+rowhead_inside <- function(x, paste_rhiLabel)
 {
-  x <- as.tblEntries(x)  # includes validity checks
   if (isTRUE(attr(x, "rowheadInside")))  return(x)
   partinfo <- tblParts(x)
   tbldim <- adim(x)
@@ -15,6 +14,7 @@ rowhead_inside <- function(x)
   # Get the entries for the outermost row header layer.
   rh1 <- with(x, part == "rowhead" & headlayer == n_rowhead)
   rh1lbl <- with(x, part == "rowheadLabels" & headlayer == n_rowhead)
+  rh1label <- x[rh1lbl, , drop=FALSE]  # 0- or 1-row data frame
   rh1entries <- x[rh1, , drop=FALSE]
   otherentries <- x[!(rh1 | rh1lbl), , drop=FALSE]
   # Consistency check:
@@ -61,6 +61,33 @@ rowhead_inside <- function(x)
   rh1entries$multirow <- FALSE
   rh1entries$multicolumn <- with(rh1entries, acol2 - acol1 > 0)
   x[rh1, ] <- rh1entries
+
+  # Add the rowhead label (if any) from the moved header to row group labels.
+  if (paste_rhiLabel && nrow(rh1label) == 1 && rh1label[, "enabled"] && 
+      rh1label[, "text"] != "") {
+    idx <- with(x, which(part == "rowhead" & headlayer == 0))
+    rh1inside <- x[idx, , drop=FALSE]
+    if ((rh1label[, "textspec"] == "markdown" && 
+         any(rh1inside[, "textspec"] == "plotmath")) || 
+        (rh1label[, "textspec"] == "plotmath" && 
+         any(rh1inside[, "textspec"] == "markdown"))) {
+      message("Markdown and plotmath text won't be mixed to create inside ", 
+              "row header labels")
+    } else {
+      bridge <- data.frame(text=with(rh1inside, 
+                                     ifelse(type %in% "numeric", " = ", ": ")), 
+                           textspec=rep("plain", nrow(rh1inside)), 
+                           stringsAsFactors=FALSE)
+      if (!is.null(rh1label$fontface)) {   # usually NULL for 'tblEntries'
+        bridge$fontface <- rep(rh1label[, "fontface"], nrow(bridge))
+      }
+      temp <- paste_text(rh1label, bridge, rh1inside, 
+                         sep=c(plain="", plotmath="*", markdown=""))
+      rh1inside[, c("text", "textspec")] <- temp[, c("text", "textspec")]
+      if (!is.null(x$fontface))  rh1inside[, "fontface"] <- temp[, "fontface"]
+      x[idx, ] <- rh1inside
+    }
+  }
 
   x <- structure(x[, , drop=FALSE], rowheadInside=TRUE)
   as.tblEntries(x)

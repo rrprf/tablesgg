@@ -1,5 +1,5 @@
 % Auto-generated documentation for function textTable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{textTable}
 \alias{textTable}
 \title{Create a Structure Representing a 2D Table }
@@ -76,13 +76,18 @@ used when plotting the table.
 }
 \details{
 \code{textTable} objects are the fundamental structure used to represent
-table content and organization in the \code{tablesgg} package.
+table _content_ and _organization_ in the \code{tablesgg} package.
 
 Components \code{body}, \code{rowhead}, \code{rowheadLabels},
 \code{colhead}, \code{title}, \code{subtitle}, and \code{foot} correspond
 to the table _parts_ with those names.  Empty parts should be of type
 character: either a 0-length vector or a matrix with one or both
 dimensions equal to 0, depending on the component.
+
+Character strings representing table content may be prefixed with either
+"MATH_" or "MKDN_".  The former indicates the string is to be interpreted
+as a \code{plotmath} expression, the latter that the string contains
+markdown or HTML tags.
 
 Components \code{partdim}, \code{rowhier}, and \code{colhier} are
 automatically derived from the other components whenever a

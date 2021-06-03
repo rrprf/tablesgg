@@ -1,4 +1,4 @@
-#===== Source file: ../addBlock.r on 2020-11-29
+#===== Source file: ../addBlock.r on 2021-06-02
 #-----
 
 addBlock <- function(x, arows, acols, id, props=NULL, enabled=FALSE)
@@ -38,8 +38,8 @@ addBlock <- function(x, arows, acols, id, props=NULL, enabled=FALSE)
   newrow[1, "acol1"] <- acols[1]
   newrow[1, "acol2"] <- acols[2]
   newrow[1, "enabled"] <- enabled
-  propnms <- names(grProps()[["block"]])
-  newrow[1, propnms] <- tablesgg::styles_pkg$blockStyle_pkg_base[1, propnms]
+  propnms <- row.names(grSpecs("block"))
+  newrow[1, propnms] <- styles_pkg$blockStyle_pkg_base[1, propnms]
   newrow[1, "style_row"] <- 0  # so graphical props are not chgd by restyling
 
   newblocks <- structure(as.prBlocks(rbind(blocks, newrow)), 

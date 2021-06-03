@@ -1,13 +1,10 @@
-#===== Source file: ../apply_style.r on 2020-11-29
+#===== Source file: ../apply_style.r on 2021-06-02
 #-----
 
-apply_style <- function(x, style, replace, scale, setEnabled, unstyled, 
-                        base_style)
+apply_style <- function(x, style, replace, setEnabled, unstyled, base_style)
 {
   stopifnot(inherits(style, "styleObj"))
   element_type <- attr(style, "element_type")
-  stopifnot(element_type %in% names(grProps()))
-  grprops <- grProps()[[element_type]]  # 1-row data frame, all NA's
   chk <- setdiff(attr(style, "match_columns"), names(x))
   if (length(chk) > 0)  stop(
     "Following columns required by 'style' are not present in 'x': ", 
@@ -15,7 +12,6 @@ apply_style <- function(x, style, replace, scale, setEnabled, unstyled,
   stopifnot(row.names(x) == x[, "id"])
   unstyled <- match.arg(unstyled, c("pass", "disable", "base", "error"))
   x_original <- x
-  scalable_properties <- attr(style, "scalable_properties")
 
   # Determine which style row to use for each element in 'x' (i.e., matches 
   # between element and style).
@@ -74,9 +70,10 @@ apply_style <- function(x, style, replace, scale, setEnabled, unstyled,
   }
   
   # Add any graphical properties not already in 'x', with values set to NA.
-  properties <- names(grprops)
+  grspecs <- grSpecs(element_type)  # one row per available property
+  properties <- row.names(grspecs)
   add_props <- setdiff(properties, names(x))
-  x[, add_props] <- grprops[rep(1, nrow(x)), add_props, drop=FALSE]
+  x[, add_props] <- df_from_spec(grspecs, n=nrow(x))[, add_props, drop=FALSE]
   
   # For matched elements, copy graphical properties from the appropriate 
   # row of 'style'.
@@ -93,23 +90,19 @@ apply_style <- function(x, style, replace, scale, setEnabled, unstyled,
   }
   x[, "style_row"] <- style_row
   if (setEnabled)  x[matched, "enabled"] <- TRUE
-  x[matched, scalable_properties] <- scale * x[matched, scalable_properties]
   
-  # Handle unmatched elements.  'scale' is applied only if 'unstyled' is "base".
+  # Handle unmatched elements.
   if (any(unmatched <- !matched)) {
     if (unstyled == "error")  stop(
       sum(unmatched), " rows of 'x' were not matched by any pattern in ", 
       "'style': ", toString(x[unmatched, "id"], width=80))
     if (unstyled == "base") {
       x2 <- apply_style(x_original, style=base_style, replace=replace, 
-                        scale=1.0, setEnabled=FALSE, unstyled="error")
+                        setEnabled=FALSE, unstyled="error")
       id_chg <- x[unmatched, "id"]
       x[unmatched, ] <- x2[id_chg, , drop=FALSE]
-      # Keep original 'style_row'.
+      # 'style_row' remains NA for unmatched elements.
       x[unmatched, "style_row"] <- NA_integer_
-      # Use 'scalable_properties' from 'style', not 'base_style'.
-      x[unmatched, scalable_properties] <- scale * 
-                                           x[unmatched, scalable_properties]
     } else if (unstyled == "disable") {
       x[unmatched, "enabled"] <- FALSE
     }  # else "pass", so do nothing

@@ -1,4 +1,4 @@
-#===== Source file: ../elements.r on 2020-11-29
+#===== Source file: ../elements.r on 2021-06-02
 #-----
 
 elements <- function(x, type=c("entry", "block", "hvrule"), enabledOnly=TRUE)
@@ -23,7 +23,8 @@ element_entry <- function(text=NULL, family=NULL, fontface=NULL, colour=NULL,
     alpha=NULL, size=NULL, hjust=NULL, vjust=NULL, angle=NULL, lineheight=NULL, 
     color=NULL, 
     hpad=NULL, vpad=NULL, fill=NULL, fill_alpha=NULL, border_size=NULL, 
-    border_colour=NULL, border_color=NULL, enabled=NULL, math=NULL, 
+    border_colour=NULL, border_color=NULL, minwidth=NULL, maxwidth=NULL, 
+    enabled=NULL, textspec=NULL, 
     inherit.blank=FALSE)
 {
     if (!is.null(colour))  color <- colour
@@ -34,7 +35,8 @@ element_entry <- function(text=NULL, family=NULL, fontface=NULL, colour=NULL,
                            angle=angle, lineheight=lineheight, hpad=hpad, 
                            vpad=vpad, fill=fill, fill_alpha=fill_alpha, 
                            border_size=border_size, border_color=border_color, 
-                           enabled=enabled, math=math, 
+                           minwidth=minwidth, maxwidth=maxwidth, 
+                           enabled=enabled, textspec=textspec, 
                            inherit.blank=inherit.blank), 
                       class=c("element_entry", "element"))
     ok <- sapply(rslt, function(x) { is.null(x) || length(x) == 1 })
@@ -68,8 +70,8 @@ element_refmark <- function(mark=NULL, side=NULL, raise, ...,
                             inherit.blank=FALSE)
 {
   dots <- list(...)
-  if (!is.null(dots[["math"]]) || !is.null(dots[["text"]]))  stop(
-    "Do not specify 'text' or 'math' when setting reference marks")
+  if (!is.null(dots[["textspec"]]) || !is.null(dots[["text"]]))  stop(
+    "Do not specify 'text' or 'textspec' when setting reference marks")
   if (!is.character(mark) || length(mark) != 1 || is.na(mark))  stop(
     "'mark' must be a single character string")
   if (!is.character(side) || length(side) != 1 || 

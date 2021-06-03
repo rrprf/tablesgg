@@ -1,5 +1,5 @@
 % Auto-generated documentation for function entries<- 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{entries<-}
 \alias{entries<-}
 \title{Update the Table Entries of a Plot-Ready or Plotted Table }

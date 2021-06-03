@@ -1,5 +1,5 @@
 % Auto-generated documentation for function update.textTable 
-%  2020-11-29 11:21:56 
+%  2021-06-02 11:12:19 
 \name{update.textTable}
 \alias{update.textTable}
 \title{Update a \code{texttable} Object }
@@ -32,7 +32,8 @@ provided arguments.
 \details{
 To indicate that a string in \code{title}, \code{subtitle}, \code{foot},
 or \code{rowheadLabels} is to be interpreted as a \code{plotmath}
-expression, prefix it with \code{MATH_}.
+expression, prefix it with \code{MATH_}.  To indicate that it contains
+markdown or HTML tags, prefix it with \code{MKDN_}.
 }
 \seealso{
 \code{\link{textTable}}

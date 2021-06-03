@@ -1,5 +1,5 @@
 % Auto-generated documentation for function prEntries 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{prEntries}
 \alias{prEntries}
 \title{Assign Graphical Properties to Table Entries }
@@ -56,9 +56,9 @@ matches more than one \code{style} row, the last matching row will
 override the earlier ones.
 
 One can also assign or modify graphical properties directly, without using
-a style, by editing a \code{prEntries} object like a data frame.  See
-\code{as.prEntries}.  Properties in an existing plot can also be modified
-using the \code{props<-} function.
+a style, by editing a \code{prEntries} object like a data frame.
+Properties in an existing plot can also be modified using the
+\code{props<-} set of functions.
 }
 \seealso{
 \code{\link{elements}} documents the descriptors and graphical properties

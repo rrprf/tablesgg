@@ -1,4 +1,4 @@
-#===== Source file: ../as.dfObj.r on 2020-11-29
+#===== Source file: ../as.dfObj.r on 2021-06-02
 #-----
 
 as.dfObj <- function(x, objClass)
@@ -7,55 +7,22 @@ as.dfObj <- function(x, objClass)
   objClass <- match.arg(objClass, classes)
   if (is.na(objClass))  stop("Invalid 'objClass' value")
   
-  # For each class, specify the columns that must be present in 'x', and the 
-  # columns that may not contain NA's for enabled rows.
-  # ('required' also represents a valid, 0-row starting point for creating 
-  # the requested object.)
-  required <- list(
-    tblEntries=data.frame(id=character(0), part=character(0), 
-                          partrow=numeric(0), partcol=numeric(0), 
-                          headlayer=numeric(0), level_in_layer=numeric(0), 
-                          text=character(0), type=character(0), 
-                          arow1=numeric(0), arow2=numeric(0), 
-                          acol1=numeric(0), acol2=numeric(0), 
-                          stringsAsFactors=FALSE), 
-    prHvrules=data.frame(id=character(0), direction=character(0), 
-                         arow1=numeric(0), arow2=numeric(0), 
-                         acol1=numeric(0), acol2=numeric(0), enabled=logical(0), 
-                         grProps()[["hvrule"]][0, , drop=FALSE], 
-                         stringsAsFactors=FALSE), 
-    tblBlocks=data.frame(id=character(0), nr=numeric(0), nc=numeric(0), 
-                         arow1=numeric(0), arow2=numeric(0), 
-                         acol1=numeric(0), acol2=numeric(0), 
-                         stringsAsFactors=FALSE))
-  required$prEntries <- data.frame(required$tblEntries, math=logical(0), 
-                                   grProps()[["entry"]][0, , drop=FALSE], 
-                                   stringsAsFactors=FALSE)
-  required$prBlocks <- data.frame(required$tblBlocks, 
-                                  grProps()[["block"]][0, , drop=FALSE], 
-                                  stringsAsFactors=FALSE)
-  NA_verboten <- list(
-    tblEntries=c("id", "part", "partrow", "headlayer", 
-                 "level_in_layer", "text", "arow1", "arow2", "acol1", "acol2", 
-                 "math", "enabled", "multicolumn", "multirow"), 
-    prEntries=c("id", "text", "arow1", "arow2", "acol1", "acol2", 
-                "math", "enabled", "hjust", "vjust", "size", "hpad", 
-                "vpad", "border_size"),
-    prHvrules=c("id", "direction", "arow1", "arow2", "acol1", "acol2", 
-                "enabled", "linetype", "size", "space"), 
-    tblBlocks=c("id", "nr", "nc"), 
-    prBlocks=c("id", "nr", "nc", "arow1", "arow2", "acol1", "acol2", "enabled", 
-               "fill_alpha", "border_size"))
+  # For each class, get info about the columns that must be present in 'x', 
+  # and the columns that may not contain NA's for enabled rows.
+  spec <- dfSpecs(objClass)
+  required <- spec$name
+  NA_verboten <- spec$name[!(spec$NA_ok)]
+  # 'template' represents a valid, 0-row starting point for creating 
+  # the requested object:
+  template <- df_from_spec(spec, n=0)
   id_col <- "id"
-  required <- required[[objClass]]
-  NA_verboten <- NA_verboten[[objClass]]
   
-  if (is.null(x))  x <- required
+  if (is.null(x))  x <- template
   if (!is.data.frame(x))  stop("'x' is not a data frame")
   xattr <- attributes(x) 
   
   #----- Check required columns.
-  chk <- setdiff(names(required), names(x))
+  chk <- setdiff(required, names(x))
   if (length(chk) > 0)  stop(
     "Following required columns not found in 'x': ", toString(chk))
   # Check ID column.
@@ -76,15 +43,12 @@ as.dfObj <- function(x, objClass)
     if (!("enabled" %in% names(x))) {
       x$enabled <- (!na_text & text != "") 
     } else if (!is.logical(x$enabled))  stop("'enabled' must be TRUE/FALSE")
-    if (!("math" %in% names(x))) {
-      x$math <- rep(FALSE, nrow(x))
-    } else if (!is.logical(x$math))  stop("'math' must be TRUE/FALSE")
+    if (!is.character(x$textspec))  stop(
+      "'textspec' must be a character string")
+    if (any(chk <- !(x$textspec %in% c("plain", "plotmath", "markdown")))) {
+      stop("Invalid values for 'textspec': ", 
+           toString(unique(x$textspec[chk]), width=40)) }
     if (!("type" %in% names(x)))  x$type <- rep(NA_character_, nrow(x))
-    #-- Identify entries to be treated as 'plotmath' expressions:
-    math <- !na_text & ((!is.na(x$math) & x$math) | grepl("^MATH_", text))
-    text[math] <- sub("^MATH_", "", text[math])
-    x$text <- text
-    x$math <- math
     #-- Add columns indicating whether the entry spans multiple rows or columns 
     #   of the table.
     x$multicolumn <- (x$acol2 > x$acol1)
@@ -148,9 +112,39 @@ as.dfObj <- function(x, objClass)
     }
   }
   if (objClass == "prEntries") {
-    # Checks already done for 'tblEntries'.
-    eltype <- "entry"
+    # Most checks already done for 'tblEntries'.  Fill in some NA's, do some 
+    # validity checks.
+    x$angle[is.na(x$angle)] <- 0
+    x$angle <- round(x$angle %% 360, 1)
+    if (any(chk <- !(x$angle %in% c(0, 90, 180, 270))))  stop(
+      "'angle' must be a multiple of 90 degrees; failed for entries: ", 
+      toString(x$id[chk], width=60))
+    x$minwidth[is.na(x$minwidth)] <- 0   # NA is treated as no constraint
+    maxwidth <- x$maxwidth
+    #-- 'plotmath' text can't be wrapped:
+    math <- (x$texspec == "plotmath")
+    x$minwidth[math] <- pmin(-1, x$minwidth[math])
+    limited_width <- (is.na(maxwidth) | (maxwidth > -1 & maxwidth < Inf))
+    if (any(chk <- (math & limited_width))) {
+      warning("'maxwidth' must be Inf or <= -1 for 'plotmath' entries; ", 
+              "changed to Inf for: ", toString(x$id[chk], width=60))
+      x$maxwidth[chk] <- Inf
+    }
+    #--
+    horiz <- (x$angle %in% c(0, 180))
+    wdpad <- ifelse(horiz, x$hpad, x$vpad)
+    if (any(chk <- (!is.na(maxwidth) & maxwidth >= 0 & 
+                    maxwidth < 2*wdpad)))  stop(
+      "'maxwidth' is less than the requested padding for entries: ", 
+      toString(x$id[chk], width=60))
+    minwidth <- x$minwidth
+    chk <- (!is.na(maxwidth) & ((maxwidth < 0 & minwidth < maxwidth) | 
+                                (maxwidth >= 0 & minwidth > maxwidth)))
+    if (any(chk))  stop(
+      "'minwidth' is greater than 'maxwidth' for entries: ", 
+      toString(row.names(x)[chk], width=60))
     # Style, scale checks are below.
+    eltype <- "entry"
     objClass <- c("prEntries", "tblEntries")
   } else if (objClass == "prHvrules") {
     eltype <- "hvrule"

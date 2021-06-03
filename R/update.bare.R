@@ -1,4 +1,4 @@
-#===== Source file: ../update.r on 2020-11-29
+#===== Source file: ../update.r on 2021-06-02
 #-----
 
 update.prObj <- function(object, style=NULL, scale=NULL, ...)
@@ -6,42 +6,41 @@ update.prObj <- function(object, style=NULL, scale=NULL, ...)
   chkDots(...)
   if (inherits(object, "prEntries")) {
     element_type <- "entry"
-    base_style <- tablesgg::styles_pkg$entryStyle_pkg_base
+    base_style <- styles_pkg$entryStyle_pkg_base
   } else if (inherits(object, "prHvrules")) {
     element_type <- "hvrule"
-    base_style <- tablesgg::styles_pkg$hvruleStyle_pkg_base
+    base_style <- styles_pkg$hvruleStyle_pkg_base
   } else if (inherits(object, "prBlocks")) {
     element_type <- "block"
-    base_style <- tablesgg::styles_pkg$blockStyle_pkg_base
+    base_style <- styles_pkg$blockStyle_pkg_base
   } else  stop("Invalid 'object' argument")
   
   if (element_type == "hvrule" && !is.null(style))  stop(
       "Cannot update the style of an existing 'prHvrules' object; ", 
       "recreate it from a 'tblBlocks' object")
   xattr <- attributes(object)
+  current_scale <- xattr[["current_scale"]]
 
-  if (is.null(style)) {  # change 'scale' only
-    if (is.null(scale))  return(object)  # nothing to do
-    scale_factor <- scale / attr(object, "current_scale")
-    style <- attr(object, "style")  # might be NULL
-    scalable_properties <- attr(style, "scalable_properties")
-    if (is.null(scalable_properties))  scalable_properties <- 
-          attr(base_style, "scalable_properties")
-    object[, scalable_properties] <- scale_factor * object[, scalable_properties]
-  } else {  
+  if (!is.null(style)) {  
     if (!inherits(style, "styleObj"))  stop("'style' is not a 'styleObj' object")
     if ((chk <- attr(style, "element_type")) != element_type)  stop(
       "Element type for 'style' (", chk, ") does not match 'object' (", 
       element_type, ")")
-    if (is.null(scale))  scale <- 1.0
-    use <- !(object[, "style_row"] %in% 0)
+    use <- !(object[, "style_row"] %in% 0)  # NA is not selected
     object[use, ] <- apply_style(object[use, , drop=FALSE], style=style, 
-                                 replace=TRUE, scale=scale, setEnabled=FALSE, 
+                                 replace=TRUE, setEnabled=FALSE, 
                                  unstyled="base", base_style=base_style)
+    object[use, ] <- apply_scale(object[use, , drop=FALSE], type=element_type, 
+                                 scale=current_scale)
+    xattr[["style"]] <- style
   }
   
-  xattr[["current_scale"]] <- scale
-  xattr[["style"]] <- style
+  if (!is.null(scale)) {
+    scale_factor <- scale / current_scale
+    object <- apply_scale(object, type=element_type, scale=scale_factor)
+    xattr[["current_scale"]] <- scale
+  }
+  
   attributes(object) <- xattr  # including class
   object
 }
@@ -75,11 +74,6 @@ update.prTable <- function(object, entryStyle=NULL, blockStyle=NULL,
   if (!is.null(entryStyle) || !is.null(scale)) {
     entries <- update.prObj(entries, style=entryStyle, scale=scale1)
   }
-  # Warn about newlines in entry text that will be treated as plotmath.
-  chk <- with(entries, grepl("\\n", text) & math & enabled)
-  if (any(chk))  warning(
-    "Newlines will be ignored in table entries with math notation or ",
-    "reference marks ('math==TRUE'): ", toString(which(chk), width=40))
 
   if (!is.null(blockStyle) || !is.null(scale)) {
     blocks <- update.prObj(blocks, style=blockStyle, scale=scale1)

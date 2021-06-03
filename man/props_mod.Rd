@@ -1,5 +1,5 @@
 % Auto-generated documentation for function props_mod 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{props_mod}
 \alias{props_mod}
 \title{Update Graphical Properties for Selected Table Elements }

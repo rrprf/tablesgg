@@ -1,5 +1,5 @@
 % Auto-generated documentation for function [.textTable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{[.textTable}
 \alias{[.textTable}
 \title{Extract a Subset of a \code{texttable} Object }

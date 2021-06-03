@@ -1,5 +1,5 @@
 % Auto-generated documentation for function plot.prTable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{plot.prTable}
 \alias{plot.prTable}
 \title{A Plot Method for \code{prtable} Objects }
@@ -20,8 +20,9 @@ outside the top, right, bottom, and left sides of the table, in
 millimeters.
   }
   \item{sizeAdjust}{Two-element numeric vector containing multipliers to adjust the calculated
-absolute size of table entries.  The first element is applied to the width
-and the second to the height.  See DETAILS.
+absolute size of table text.  The first element is applied to the
+horizontal dimension and the second to the vertical dimension.  See
+DETAILS.
   }
   \item{...}{Other arguments, ignored with a warning.  (Included for compatibility with
 the \code{plot} generic.)
@@ -42,12 +43,12 @@ by \code{plot.margin}.
 
 The object also has attributes \code{colBoundaries} and
 \code{rowBoundaries} giving the coordinates of the boundaries between
-columns and between rows, again in mm, and after applying \code{scale} and
+columns and between rows, again in mm, and after applying
 \code{sizeAdjust}.
 
 The object also has attribute \code{prTable}, the plot-ready table object
-after applying \code{scale}.  This is to allow convenient updating of the
-display properties of the table.
+\code{x}.  This is to allow convenient updating of the display properties
+of the table.
 }
 \details{
 The implicit coordinate system for the plot is in millimeters, with the
@@ -59,7 +60,7 @@ millimeters except font size, which is in points.
 The print method for \code{pltdTable} objects attempts to draw the table
 at its natural size, as given by attribute \code{size_mm}.  (Function
 \code{pltdSize} provides convenient access to this attribute, in
-user-controllable units.) However the calculated size depends somewhat on
+user-controllable units.) However the calculated size depends slightly on
 the graphics device being used (see \code{?Devices}).  \code{sizeAdjust}
 may be used to compensate for this difference when a plotted table object
 created using one device is to be displayed with a different one.
@@ -71,6 +72,7 @@ as 0 when laying out the table.
 }
 \seealso{
 \code{\link{prTable}}, \code{\link{pltdSize}},
-\code{\link{print.pltdTable}}, \code{\link{Devices}}
+\code{\link{print.pltdTable}}, \code{\link{Devices}},
+\code{\link{calc_rcsize}}, \code{\link{coord_justif}}
 }
 \keyword{internal}

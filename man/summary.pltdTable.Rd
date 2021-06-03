@@ -1,5 +1,5 @@
 % Auto-generated documentation for function summary.pltdTable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{summary.pltdTable}
 \alias{summary.pltdTable}
 \title{Summarize the Dimensions and Options of a Plotted Table }

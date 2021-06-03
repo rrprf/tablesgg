@@ -1,5 +1,5 @@
 % Auto-generated documentation for function plot.textTable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{plot.textTable}
 \alias{plot.textTable}
 \title{A Plot Method for \code{texttable} Objects }
@@ -55,9 +55,9 @@ outside the top, right, bottom, and left sides of the table, in
 millimeters.  The default is taken from \code{tablesggOpt()}.
   }
   \item{sizeAdjust}{Two-element numeric vector containing multipliers to adjust the calculated
-absolute size of table entries.  The first element is applied to the width
-and the second to the height.  (It should not be necessary to change
-this.)
+absolute size of table text.  The first element is applied to the
+horizontal dimension and the second to the vertical dimension.  (It should
+not be necessary to change this.)
   }
   \item{...}{Other arguments, ignored with a warning.  (Included for compatibility with
 the \code{plot} generic.)

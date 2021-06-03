@@ -1,4 +1,4 @@
-#===== Source file: ../textTable.r on 2020-11-29
+#===== Source file: ../textTable.r on 2021-06-02
 #-----
 
 textTable <- function(x, ...)
@@ -10,10 +10,16 @@ textTable <- function(x, ...)
 
 textTable.default <- function(x, ...)
 {
-  chkDots(...)
   x <- unclass(x)  # Want to treat it as a bare list (e.g., avoid special
                    # methods for '[').
-
+  # Capture special case of 'x' an atomic vector and send it to the 'matrix' 
+  # method.
+  if (is.vector(x) && is.atomic(x)) {
+    x <- matrix(x, ncol=1, dimnames=list(names(x), NULL))
+    return(textTable(x, ...))
+  }
+  
+  chkDots(...)
   partnames <- c("title", "subtitle", "rowhead", "rowheadLabels", "colhead", 
                  "body", "foot")  # order should be consistent w/ tblParts
 

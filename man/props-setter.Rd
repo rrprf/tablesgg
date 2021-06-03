@@ -1,5 +1,5 @@
 % Auto-generated documentation for function props<- 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{props<-}
 \alias{props<-}
 \title{Update Graphical Properties for Selected Table Elements }
@@ -63,19 +63,24 @@ and padding on their left and right will be reduced to 80\% of the current
 amount.  Any graphical properties not mentioned in the call that creates
 the \code{element_*} object are left unchanged.
 
-There are two special properties: \code{enabled} and \code{math} (the
-latter only for entries).  Both are logical scalars.  If \code{enabled} is
-set to FALSE the selected elements will not be displayed, and disabled
-entries/hvrules will not be allocated any space in the plotted table.  If
-\code{math} is TRUE, entry text will be treated as a \code{plotmath}
-expression.  This allows display of mathematical symbols and notation,
-including subscripts and superscripts, in the table.
+There are two special properties: \code{enabled} and \code{textspec} (the
+latter only for entries).  \code{enabled} is a logical scalar.  If
+\code{enabled} is set to FALSE the selected elements will not be
+displayed, and disabled entries/hvrules will not be allocated any space in
+the plotted table. \code{textspec} is a character string, one of "plain",
+"plotmath", or "markdown".  If "plotmath", entry text will be treated as
+an expression that allows display of mathematical symbols and notation,
+including subscripts and superscripts (see \code{?plotmath}).  If
+"markdown", entry text may contain markdown or HTML tags that affect the
+appearance of the displayed text.  (This requires the \code{ggtext}
+package, and only a subset of HTML tags is supported.  See the
+\code{ggtext} package documentation for more information.)
 
 \code{element_refmark} is used to add a reference mark to the selected
 entries.  (A reference mark is a symbol placed before or after entry text
 to indicate cross-references; e.g. for footnotes.)  It may also update any
 of the graphical properties accepted by \code{element_entry}, except
-\code{math} and \code{text}.
+\code{textspec} and \code{text}.
 
 Arguments \code{id} and \code{regex} indicate which elements are to be
 updated.  When \code{value} indicates that table entries are to be

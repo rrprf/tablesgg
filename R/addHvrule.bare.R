@@ -1,4 +1,4 @@
-#===== Source file: ../addHvrule.r on 2020-11-29
+#===== Source file: ../addHvrule.r on 2021-06-02
 #-----
 
 addHvrule <- function(x, direction, arows, acols, id, props=NULL, enabled=TRUE)
@@ -63,8 +63,8 @@ addHvrule <- function(x, direction, arows, acols, id, props=NULL, enabled=TRUE)
   newrow[1, "acol1"] <- acols[1]
   newrow[1, "acol2"] <- { if (direction == "vrule")  acols[1]  else  acols[2] }
   newrow[1, "enabled"] <- enabled
-  propnms <- names(grProps()[["hvrule"]])
-  newrow[1, propnms] <- tablesgg::styles_pkg$hvruleStyle_pkg_base[1, propnms]
+  propnms <- row.names(grSpecs("hvrule"))
+  newrow[1, propnms] <- styles_pkg$hvruleStyle_pkg_base[1, propnms]
   newrow[1, "style_row"] <- 0  # so graphical props are not chgd by restyling
 
   newrules <- structure(as.prHvrules(rbind(hvrules, newrow)), 

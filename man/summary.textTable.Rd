@@ -1,5 +1,5 @@
 % Auto-generated documentation for function summary.textTable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{summary.textTable}
 \alias{summary.textTable}
 \title{Summarize the Dimensions of a Table and Its Parts }

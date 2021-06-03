@@ -1,9 +1,15 @@
-#===== Source file: ../tablesggOpt.r on 2020-11-29
+#===== Source file: ../tablesggOpt.r on 2021-06-02
 #-----
 
 tablesggOpt <- function(x=NULL, reset=FALSE)
 {
-  if (reset)  assignInMyNamespace("currentOpt", .tablesggOpt)
+  if (reset) {
+    opt <- .tablesggOpt
+    opt[["allowMarkdown"]] <- requireNamespace("ggtext", quietly=TRUE)
+    opt[["allowWrap"]] <- opt[["allowMarkdown"]] && 
+                          requireNamespace("quadprog", quietly=TRUE)
+    assignInMyNamespace("currentOpt", opt)
+  }
   if (length(x) == 1) {
     if (!is.character(x) || !(x %in% names(currentOpt)))  stop(
       "'x' (", x, ") is not the name of an available option")
@@ -11,7 +17,7 @@ tablesggOpt <- function(x=NULL, reset=FALSE)
   } else if (is.null(x)) {
     rslt <- currentOpt
   } else stop("'x' must be either a single option name, or NULL")
-  invisible(rslt)
+  if (reset)  invisible(rslt)  else  rslt
 }
 
 #-----
@@ -38,16 +44,30 @@ tablesggSetOpt <- function(...)
     if (optname == "entryStyle") {
       valid <- (inherits(vi, "styleObj") && 
                 attr(vi, "element_type") == "entry")
+      msg <- "Not a 'styleObj' object with type 'entry'"
     } else  if (optname == "blockStyle") {
       valid <- (inherits(vi, "styleObj") && 
                 attr(vi, "element_type") == "block")
+      msg <- "Not a 'styleObj' object with type 'block'"
     } else if (optname == "hvruleStyle") {
       valid <- (inherits(vi, "styleObj") && 
                 attr(vi, "element_type") == "hvrule")
+      msg <- "Not a 'styleObj' object with type 'hvrule'"
     } else if (optname == "plot.margin") {
       valid <- (is.numeric(vi) && length(vi) == 4)
+      msg <- "Not a numeric vector of length 4"
+    } else if (optname == "allowMarkdown") {
+      valid <- (isFALSE(vi) || (isTRUE(vi) && 
+                                requireNamespace("ggtext", quietly=TRUE)))
+      msg <- "Package 'ggtext' is required but not installed"
+    } else if (optname == "allowWrap") {
+      valid <- (isFALSE(vi) || (isTRUE(vi) && 
+                                requireNamespace("ggtext", quietly=TRUE) && 
+                                requireNamespace("quadprog", quietly=TRUE)))
+      msg <- "Packages 'ggtext' and 'quadprog' are required but not installed"
     }
-    if (!valid)  stop("Invalid value provided for option '", optname, "'")
+    if (!valid)  stop("Invalid value for option '", optname, "': ", 
+                      msg)
   }
   
   oldopt <- opt[onames]

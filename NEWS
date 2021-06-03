@@ -1,3 +1,43 @@
+Changes in version 0.8-1 (2021-05-31)
+
+  * A 'textTable' method for matrices has been added.  In addition, calling 
+  'textTable' with a simple (atomic) vector argument will treat the vector 
+  as a one-column matrix.
+  
+  * Table entries may now use markdown/HTML tags to mix different fonts, 
+  font faces, colors, etc within a single entry.  This requires 
+  optional package 'ggtext'.  The feature can be turned on and off via new 
+  package option 'allowMarkdown'.  The prefix "MKDN_" is used in 'textTable' 
+  objects to indicate entries that contain markdown/HTML.  To support this 
+  feature (along with the existing 'plotmath' text) entry descriptor 
+  'textspec' has replaced 'math'.  
+  
+  * New graphical properties 'minwidth' and 'maxwidth' have been added for 
+  table entries (see '?elements' for descriptions).  These allow one to 
+  control the displayed width of entries.  'maxwidth' is enforced by 
+  automatic wrapping of text into multiple lines; it requires optional 
+  packages 'ggtext' and 'quadprog'.  Wrapping can be turned on and off via 
+  new package option 'allowWrap'.  
+  
+  * Graphical property 'angle' must now be a multiple of 90 degrees.
+  
+  * Scale multipliers now act independently of style updates, so the order 
+  in which they are changed does not matter.  (This is not fully backward 
+  compatible because it changes the default for 'scale' in the 'update' 
+  method for plotted tables.)
+  
+  * The internal structure of styles ('styleObj' objects) has changed 
+  slightly:  (a) Entry styles now include new properties 'minwidth' and 
+  'maxwidth'.  (b) The graphical properties that are affected by 'scale' 
+  are now hard-coded, rather than specified by a 'scalable_properties 
+  attribute of each style.
+  
+  * Built-in entry styles in 'styles_pkg' have been modified to include 
+  the new properties 'minwidth' and 'maxwidth'.
+  
+  * Handling of text justification and rotation (combinations of 'hjust', 
+  'vjust', and 'angle' properties) is now more consistent.
+
 Changes in version 0.7-1 (2020-11-29)
 
   * First public release.

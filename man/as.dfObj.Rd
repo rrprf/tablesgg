@@ -1,5 +1,5 @@
 % Auto-generated documentation for function as.dfObj 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{as.dfObj}
 \alias{as.dfObj}
 \title{Promote a Data Frame to Another Object Class }
@@ -26,8 +26,7 @@ One of: "tblEntries", "tblBlocks", "prEntries", "prHvrules", "prBlocks".
 An object with S3 classes given by \code{objClass} and "data.frame".
 }
 \details{
-This is an internal utility function.  Package users should call one of
-the \code{as.<objClass>} functions directly.
+This is a backend to the \code{as.<objClass>} functions.
 
 The purpose of this function is to reduce code repetition by factoring out
 common tasks when promoting a data frame to one of the data frame-based
@@ -37,6 +36,8 @@ For all objects, row names are set equal to the \code{id} column.
 }
 \seealso{
 \code{\link{tblEntries}}, \code{\link{tblBlocks}},
-\code{\link{prEntries}}, \code{\link{prHvrules}}, \code{\link{prBlocks}}
+\code{\link{prEntries}}, \code{\link{prHvrules}}, \code{\link{prBlocks}};
+\code{\link{dfSpecs}} returns info about the fields required for each
+object class.
 }
 \keyword{internal}

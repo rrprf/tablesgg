@@ -1,5 +1,5 @@
 % Auto-generated documentation for function as.prEntries 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:18 
 \name{as.prEntries}
 \alias{as.prEntries}
 \title{Promote a Data Frame to a \code{prentries} Object }
@@ -14,9 +14,9 @@ as.prEntries(x)
 \arguments{
   \item{x}{An object inheriting from \code{data.frame}.  Each row contains the
 content, location, and graphical properties of one table entry.  Columns
-must include all those required for a \code{tblEntries} object, plus all
-the graphical properties required to display an entry (see
-\code{grProps}).
+must include all those required for a \code{tblEntries} object (see
+\code{dfSpecs}), plus all the graphical properties required to display an
+entry (see \code{grSpecs}).
   }
 }
 \value{
@@ -35,7 +35,7 @@ row and column numbers in the augmented row-column grid of the table; see
 \code{adim} for more information.
 
 The graphical properties required for a plot-ready entry, and their types,
-are defined in object \code{grProps}.
+are defined in object \code{grSpecs}.
 
 If not present, logical column \code{enabled} will be added with value
 TRUE for all entries whose \code{text} is not NA or empty.  If attribute

@@ -1,4 +1,4 @@
-#===== Source file: ../tblEntries.r on 2020-11-29
+#===== Source file: ../tblEntries.r on 2021-06-02
 #-----
 
 tblEntries <- function(x, mergeRuns=c(TRUE, TRUE), rowheadInside=FALSE)
@@ -26,6 +26,7 @@ tblEntries <- function(x, mergeRuns=c(TRUE, TRUE), rowheadInside=FALSE)
                          arow1=numeric(0), arow2=numeric(0), acol1=numeric(0), 
                          acol2=numeric(0), 
                          stringsAsFactors=FALSE)
+  # ('multirow', 'multicolumn', 'textspec', 'enabled' are added at the end.)
 
   #-----
   make_part_info <- function(x, part, subpart=NA_character_)
@@ -148,12 +149,11 @@ tblEntries <- function(x, mergeRuns=c(TRUE, TRUE), rowheadInside=FALSE)
   }
   # Empty strings in 'text' are disabled.
   enabled[!na_text & text == ""] <- FALSE
-  # Identify entries to be treated as 'plotmath' expressions:
-  math <- !na_text & grepl("^MATH_", text)
-  text[math] <- sub("^MATH_", "", text[math])
-  rslt$text <- text
-  rslt$math <- math
   rslt$enabled <- enabled
+  # Identify entries to be treated specially for display (plotmath and 
+  # markdown) by looking for prefixes:
+  rslt$textspec <- spec_from_text(text)  # never NA
+  rslt$text <- prefix_text(text, action="remove")  # NA's retained
   # Add columns indicating whether the entry spans multiple rows or columns 
   # of the table.
   rslt$multicolumn <- (rslt$acol2 > rslt$acol1)
@@ -167,34 +167,13 @@ tblEntries <- function(x, mergeRuns=c(TRUE, TRUE), rowheadInside=FALSE)
   rslt[, "hjust"] <- c(0, 1, 0.5)[match(just, c("l", "r", "c"))]  # NA propagates
   rslt[, "justify"] <- NULL
   
-  attr(rslt, "rowhier") <- x$rowhier
-  attr(rslt, "colhier") <- x$colhier
-  
-  if (n_rowhead == 0)  rowheadInside <- FALSE
-  if (rowheadInside) {
-    rh1label <- with(rslt, part == "rowheadLabels" & headlayer == n_rowhead & 
-                           enabled)
-    rh1label <- rslt[rh1label, , drop=FALSE]  # 0- or 1-row data frame
-    attr(rslt, "rowheadInside") <- FALSE
-    row.names(rslt) <- rslt[, "id"]  
-    rslt <- rowhead_inside(rslt)
-    # Add the rowhead label (if any) from the moved header to row group labels.
-    if (nrow(rh1label) == 1 && rh1label[, "text"] != "") {
-      idx <- with(rslt, which(part == "rowhead" & headlayer == 0))
-      rh1inside <- rslt[idx, , drop=FALSE]
-      bridge <- data.frame(text=with(rh1inside, 
-                                     ifelse(type %in% "numeric", " = ", ": ")), 
-                           math=rep(FALSE, nrow(rh1inside)), 
-                           stringsAsFactors=FALSE)
-      bridge$fontface <- rh1inside$fontface  # usually NULL for 'tblEntries'
-      rh1inside[, c("text", "math")] <- paste_pm(rh1label, bridge, rh1inside, 
-                                                  sep=c("", "*"))
-      rslt[idx, ] <- rh1inside
-    }
-  }
-  
+  rslt <- structure(rslt, mergeRuns=mergeRuns, rowheadInside=FALSE, 
+                    rowhier=x$rowhier, colhier=x$colhier, 
+                    class=c("tblEntries", "data.frame"))
   row.names(rslt) <- rslt[, "id"]
-  structure(rslt, mergeRuns=mergeRuns, rowheadInside=rowheadInside, 
-            class=c("tblEntries", "data.frame"))
+
+  if (n_rowhead == 0)  rowheadInside <- FALSE
+  if (rowheadInside)  rslt <- rowhead_inside(rslt, paste_rhiLabel=TRUE)
+  rslt
 }
 

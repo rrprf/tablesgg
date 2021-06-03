@@ -1,5 +1,5 @@
 % Auto-generated documentation for function rowhead_inside 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{rowhead_inside}
 \alias{rowhead_inside}
 \title{Move the Outermost Layer of Row Headers Inside a Table }
@@ -11,10 +11,13 @@ that level as a label.  This is an internal function, not intended to be
 called by package users.
 }
 \usage{
-rowhead_inside(x)
+rowhead_inside(x, paste_rhiLabel)
 }
 \arguments{
   \item{x}{A \code{tblEntries} object containing table entries.
+  }
+  \item{paste_rhiLabel}{Logical scalar.  If TRUE the rowheadLabel for the outermost row header
+layer is prefixed to its levels when creating the interior labels.
   }
 }
 \value{
@@ -34,11 +37,15 @@ layer) is removed.  The entries for that layer are moved to new rows
 inserted into the table, so instead of appearing at the left side of the
 table, they appear as labels (spanning all columns of the table) above
 groups of rows.  The \code{id}, \code{part}, \code{subpart},
-\code{level_in_layer}, \code{text}, \code{type}, \code{math}, and
-\code{enabled} values for those entries do not change.  However
-\code{headlayer} is now set to 0 (since the header is now interleaved with
-the body of the table), \code{multirow} to FALSE, and \code{multicolumn}
-to TRUE (if the table has more than one column).
+\code{level_in_layer}, \code{text}, \code{type}, and \code{enabled} values
+for those entries do not change.  However \code{headlayer} is now set to 0
+(since the header is now interleaved with the body of the table),
+\code{multirow} to FALSE, and \code{multicolumn} to TRUE (if the table has
+more than one column).
+
+The \code{textspec} values of the moved entries may change if
+\code{paste_rhiLabel} is TRUE; an error will be raised if pasting of
+markdown and non-markdown text is attempted.
 
 The \code{rowheadLabels} entry (if any) for the moved row header layer
 also has its \code{headlayer} set to 0, and is disabled.

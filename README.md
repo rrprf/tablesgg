@@ -12,7 +12,7 @@ the need for most manual adjustments to achieve an attractive result.
 be presented anywhere a graph could be, with no more effort.  External 
 software such as LaTeX or HTML or their viewers is not required. 
 
-Methods are included to display data frames; tables created by R's 
+Methods are included to display matrices; data frames; tables created by R's 
 ftable(), table(), and xtabs() functions; and tables 
 created by the `tables` and `xtable` packages.  Methods can be 
 added to display other table-like objects. 

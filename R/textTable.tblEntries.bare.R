@@ -1,10 +1,9 @@
-#===== Source file: ../textTable.tblEntries.r on 2020-11-29
+#===== Source file: ../textTable.tblEntries.r on 2021-06-02
 #-----
 
 textTable.tblEntries <- function(x, ...)
 {
   chkDots(...)
-  x <- as.tblEntries(x)
   if (attr(x, "rowheadInside"))  x <- undo_rowhead_inside(x)
   # Dimensions of table parts.
   partinfo <- tblParts(x)  # matrix
@@ -13,8 +12,7 @@ textTable.tblEntries <- function(x, ...)
   partrow <- x[, "partrow"]
   partcol <- x[, "partcol"]
   text <- x[, "text"]
-  math <- x[, "math"]
-  text[math] <- paste0("MATH_", text[math])
+  text <- prefix_text(text, spec=x[, "textspec"], action="add")
   type <- { if ("type" %in% names(x))  x[, "type"]  
             else  rep(NA_character_, nrow(x)) }
   hjust <- { if ("hjust" %in% names(x))  x[, "hjust"]  

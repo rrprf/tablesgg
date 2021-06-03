@@ -1,5 +1,5 @@
 % Auto-generated documentation for function blocks 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{blocks}
 \alias{blocks}
 \title{Extract the \code{prblocks} Object from a Plot-Ready or Plotted Table }

@@ -1,4 +1,4 @@
-#===== Source file: ../prBlocks.r on 2020-11-29
+#===== Source file: ../prBlocks.r on 2021-06-02
 #-----
 
 prBlocks <- function(x, style=tablesggOpt("blockStyle"), scale=1.0)
@@ -11,9 +11,10 @@ prBlocks <- function(x, style=tablesggOpt("blockStyle"), scale=1.0)
   if (!inherits(style, "styleObj"))  stop("'style' is not a 'styleObj' object")
   if ((chk <- attr(style, "element_type")) != "block")  stop(
     "'style' is not a style for blocks, its 'element_type' is '", chk, "'")
-  x <- apply_style(x, style=style, replace=TRUE, scale=scale, 
+  x <- apply_style(x, style=style, replace=TRUE, 
                    setEnabled=FALSE, unstyled="base", 
-                   base_style=tablesgg::styles_pkg$blockStyle_pkg_base)
+                   base_style=styles_pkg$blockStyle_pkg_base)
+  x <- apply_scale(x, type="block", scale=scale)
 
   x <- structure(x, row.names=x[, "id"], current_scale=scale, style=style, 
                  rowheadInside=xattr[["rowheadInside"]], 

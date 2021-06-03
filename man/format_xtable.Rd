@@ -1,5 +1,5 @@
 % Auto-generated documentation for function format_xtable 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{format_xtable}
 \alias{format_xtable}
 \title{Format Entries in an \code{xtable} into Character Strings }

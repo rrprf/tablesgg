@@ -1,11 +1,11 @@
-condition,hjust,vjust,color,alpha,size,family,fontface,lineheight,angle,hpad,vpad,fill,fill_alpha,border_size,border_color
-"part == ""body""",1,1,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0,NA
-"part == ""rowhead"" & !multirow",0,1,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0,NA
-"part == ""rowhead"" & multirow",0,0,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0,NA
-"part == ""rowhead"" & headlayer == 0",0.5,0.5,black,1,10,serif,3,0.9,0,1,0.7,NA,1,0,NA
-"part == ""colhead"" & !multicolumn",1,1,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0,NA
-"part == ""colhead"" & multicolumn",0.5,1,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0,NA
-"part == ""rowheadLabels""",0,1,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0,NA
-"part == ""title""",0,0,black,1,11,serif,1,0.9,0,1,0.7,NA,1,0,NA
-"part == ""subtitle""",0,0,black,1,9,serif,1,0.9,0,1,0.7,NA,1,0,NA
-"part == ""foot""",0,0,black,1,9,serif,1,0.9,0,1,0.5,NA,1,0,NA
+condition,hjust,vjust,color,alpha,size,family,fontface,lineheight,angle,hpad,vpad,fill,fill_alpha,border_size,border_color,minwidth,maxwidth
+"part == ""body""",1,1,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0.5,NA,-1,Inf
+"part == ""rowhead"" & !multirow",0,1,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0.5,NA,-1,Inf
+"part == ""rowhead"" & multirow",0,0,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0.5,NA,-1,Inf
+"part == ""rowhead"" & headlayer == 0",0.5,0.5,black,1,10,serif,3,0.9,0,1,0.7,NA,1,0.5,NA,-1,Inf
+"part == ""colhead"" & !multicolumn",1,1,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0.5,NA,-1,Inf
+"part == ""colhead"" & multicolumn",0.5,1,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0.5,NA,-1,Inf
+"part == ""rowheadLabels""",0,1,black,1,10,serif,1,0.9,0,1,0.7,NA,1,0.5,NA,-1,Inf
+"part == ""title""",0,0,black,1,11,serif,1,0.9,0,1,0.7,NA,1,0.5,NA,-0.4,NA
+"part == ""subtitle""",0,0,black,1,9,serif,1,0.9,0,1,0.7,NA,1,0.5,NA,-0.4,NA
+"part == ""foot""",0,0,black,1,9,serif,1,0.9,0,1,0.5,NA,1,0.5,NA,-0.4,NA

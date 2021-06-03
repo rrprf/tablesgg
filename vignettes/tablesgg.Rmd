@@ -1,7 +1,7 @@
 ---
 title: "The **tablesgg** Package"
 author: "Richard Raubertas"
-date: "29 November 2020"
+date: "27 May 2021"
 output: 
   pdf_document: 
     toc: true
@@ -43,7 +43,7 @@ be, with no more effort.  External software such as LaTeX or HTML or their
 viewers is not required. 
 
 `tablesgg` does not *create* tables from raw data, it *displays* tables 
-created by other means.  It has methods to display data frames; 
+created by other means.  It has methods to display matrices; data frames; 
 contingency tables created by R's built-in `table` and `xtabs` functions; 
 tables created by R's `ftable` function; and tables created by the packages 
 `tables` [Murdoch, 2020] and `xtable` [Dahl, et al, 2019].  Methods can be 
@@ -85,7 +85,7 @@ theme_update(plot.background=element_rect(fill=NA))
 
 To create more sophisticated data summary tables I recommend the `tables` 
 package [Murdoch, 2020].  `tablesgg` defines a `textTable` method for the 
-`tabular` objects created by `tables`, so displaying them can be done in 
+`tabular` objects created by that package, so displaying them can be done in 
 one line.  For example, to display means and standard deviations 
 for each measurement and species in the iris data, first create the table,
 
@@ -124,6 +124,14 @@ the graphics device on which it is displayed.  The user can easily increase
 or decrease the displayed size by a scale factor, maintaining the relative 
 proportions of table elements.
 
+* Table entries can use markdown/HTML tags to mix different fonts, font 
+faces, colors, and text sizes within a single entry.  (Requires the `ggtext` 
+package [Wilke, 2020].)
+
+* Automatic wrapping of entry text to a user-specified width is 
+available.  (Requires the `ggtext` [Wilke, 2020] and `quadprog` 
+[Turlach, 2019] packages.)
+
 * Since the plotted tables are ordinary `ggplot` objects, 
 the facilities of `ggplot2` and its various extension packages are 
 available to modify or manipulate the table.  For example, the table can be 
@@ -134,10 +142,6 @@ method for the object class.  See Appendix A.
 
 ## Some limitations
 
-* `tablesgg` does not do automatic line wrapping of table entries.  Multi-line 
-entries are supported, but line breaks (`\n` characters) have to be 
-inserted in the entry text before the table is displayed.
-
 * Splitting a very long or wide table into multiple, smaller subtables is 
 currently not supported.
 
@@ -145,7 +149,8 @@ currently not supported.
 R's `plotmath` facility.  This is more limited than what is available through 
 LaTeX or HTML.  A particular limitation is that `plotmath` ignores 
 line breaks in text strings, so math notation cannot be used in 
-multi-line entries.
+multi-line entries.  Also `plotmath` and markdown/HTML cannot mixed within 
+the same entry.
 
 ## Logical structure of a data summary table
 
@@ -412,6 +417,43 @@ created, as above, or can be added or edited afterward using the
 `props` functions discussed in section 4.2.3.  Note that `plotmath` ignores 
 control characters such as newline (`\n`) in expressions.
 
+## Markdown/HTML in table entries
+
+If the `ggtext` package [Wilke, 2020] has been installed, entry text can 
+include markdown/HTML tags.  These allow one to mix different fonts, 
+font faces and sizes, and colors within a single entry.  To indicate that 
+entry text is to be interpreted as markdown/HTML, prefix it with `MKDN_`. 
+For example, 
+
+```{r, eval=tablesggOpt("allowMarkdown")}
+txt1 <- paste0(
+          "MKDN_Some <span style='color:blue'>blue text **in bold.**</span><br>", 
+          "And *italic text.*<br>", 
+          "And some <span style='font-size:18pt; color:black'>large</span> text.")
+txt2 <- "MKDN_Super- and subscripts: *x*<sup>2</sup> + 5*x* + *C*<sub>*i*</sub>"
+plt <- plot(textTable(matrix(c(txt1, txt2), ncol=1)), 
+            title="Illustrate markdown", scale=1.2)
+```
+```{r, echo=FALSE, eval=tablesggOpt("allowMarkdown")}
+sz <- pltdSize(plt, units="in")
+```
+```{r, fig.width=sz[1], fig.height=sz[2], eval=tablesggOpt("allowMarkdown")}
+print(plt)
+```
+```{r, echo=FALSE, eval=!tablesggOpt("allowMarkdown")}
+cat("[Example skipped because 'tablesggOpt(\"allowMarkdown\")' is FALSE]\n")
+```
+
+* This feature can be turned on and off using the package option 
+`allowMarkdown` (see `?tablesggSetOpt`).  By default the option is set 
+to `TRUE` if `ggtext` is installed and `FALSE` if not.
+
+* Not all HTML tags are supported.  See `?ggtext::geom_richtext` for 
+examples of what is available.  Note that line breaks are indicated 
+by `\n` in plain text, but by the `<br>` tag in HTML.
+
+* Markdown/HTML and `plotmath` cannot be mixed in the same entry.
+
 ## Reference marks
 
 A reference mark is a symbol placed before or after entry text to indicate 
@@ -435,12 +477,21 @@ Argument `mark` is the character or symbol to be used as the reference mark.
 `before` and `after` are *regular expressions* (see `?regex`) that 
 identify which table entries are to have the mark placed at their beginning or 
 end, respectively.  `raise` indicates whether the reference mark is to be 
-displayed as a superscript (using `plotmath`).
+displayed as a superscript (using `plotmath` or markdown).
 
 In the example the `after` regular expression matches all three row headers 
 corresponding to standard deviations, since they all have the same entry text. 
 For finer control, such as to mark only the first appearance, the `props` 
 functions can be used with a `pltdTable` object, as described in section 4.2.3.
+
+## Setting minimum and maximum widths for table entries
+
+The graphical properties `minwidth` and `maxwidth`, set either by a
+style or with one of the `props` functions, can be used to control the 
+width of individual table entries (and thereby the widths of the columns 
+they span).  For example, setting the minimum or maximum width of a 
+table's title will control the width of the whole table, since the 
+title spans all columns.  See Appendix C for details.
 
 ## Use with table objects from other packages
 
@@ -1070,7 +1121,7 @@ from a data frame.  For example
 plt <- plot(textTable(iris2_tab))
 propsd(plt, subset=(enabled)) <- element_hvrule(color="red")
 propsd(plt, subset=(part == "colhead" & headlayer == 1)) <- 
-       element_entry(angle=90, hjust=0.5, vjust=0.5)
+       element_entry(angle=90, hjust=0.5, vjust=1.0)
 ```
 ```{r, echo=FALSE}
 sz <- pltdSize(plt, units="in")
@@ -1145,14 +1196,14 @@ by default for hvrules), and `id` can be used to assign it an ID string.
 
 ### Adding reference marks
 
-Reference marks (section 2.7) are modifications of table entries, not 
+Reference marks (section 2.8) are modifications of table entries, not 
 table elements in themselves.  Nevertheless, for convenience there is an 
 `element_refmark` function that can be used on the right-hand side of 
 `props` function assignments to set reference marks on entries.  This was 
 illustrated in section 4.2.3 above.  
 
 A second way to add reference marks is the `addRefmark` function.  It works 
-for both `textTable`s and `pltdTable`s, and was illustrated in section 2.7.
+for both `textTable`s and `pltdTable`s, and was illustrated in section 2.8.
 
 ### Modifications at the `ggplot2` level
 
@@ -1161,7 +1212,7 @@ such.  Nevertheless in most cases it is best to do styling and
 modification using the tools provided by the `tablesgg` package.  The main 
 reason is that most `ggplot2` plots do not have a fixed physical size---they 
 adapt to the size of the current graphics device or viewport when they are 
-displayed. `pltdTable` objects do have a specific physical size and there is a 
+displayed. `pltdTable` objects do have a specific physical size, and there is a 
 dedicated `print` method to make sure they are displayed that way.  Modifying 
 a `pltdTable` with `ggplot2` operations, such as `plt + ggtitle("A title")`, 
 will produce a result that may not display properly using either the 
@@ -1582,7 +1633,105 @@ size `rowgroupSize`.  `headlayer` and `level_in_layer` will be NA for the
 group blocks, and block ID's will have the form `rowblock/G///k`, where 
 `k` is the group number (and value of `group_in_level`).
 
-# Appendix C: Tables as graphs {-}
+# Appendix C: Setting minimum and maximum widths for table entries {-}
+
+The graphical properties `minwidth` and `maxwidth`, set either by a
+style or with one of the `props` functions, can be used to control the 
+width of individual table entries. (Here *width* is with respect to the 
+text itself; i.e., the direction of reading for English text, and therefore 
+measured vertically if the text is rotated by 90 or 270 degrees.)  
+
+Constraints may be expressed in two forms.  Positive values are interpreted as 
+absolute widths in millimeters, and should include the amount of padding 
+specified by `hpad` (when `angle` is 0 or 180 degrees) or `vpad` (when 
+`angle` is 90 or 270 degrees).  Negative values are interpreted as multiples 
+of the natural width of the text itself, *without* including padding.  Thus 
+setting `minwidth` for an entry to `-1` will guarantee that the width 
+of the spanned cell(s) will be at least enough to contain the text 
+without wrapping.
+
+For simplicity the remainder of this description will assume unrotated text, 
+so that width contraints on entries affect the widths of columns and the 
+width of the table as a whole.  When text is rotated to be vertical, width 
+constraints will instead affect row heights and the height of the table.
+
+## `minwidth` {-}
+
+`minwidth` constraints are satisfied by expanding column widths as much 
+as necessary: a column will be at least as wide as the maximum `minwidth` 
+for any entry contained in that column.  When an entry spans multiple 
+columns, the additional width is allocated proportionally to each of 
+the spanned columns.
+
+An NA value for `minwidth` means there is no constraint on minimum width 
+for that entry, and is equivalent to 0.  The default entry style 
+`styles_pkg$entryStyle_pkg_1` sets `minwidth` to `-1` for all entries in 
+the table body, row and column headers, and row header labels.  The default 
+value for table annotation (title, subtitle, and foot lines) is `-0.4`, 
+which means that the table width will always be at least 40% of the natural, 
+unwrapped width of the annotation text.  This prevents excessive amounts 
+of text wrapping when `maxwidth` is NA.
+
+## `maxwidth` and automatic text wrapping {-}
+
+`maxwidth` constraints are satisfied by *wrapping*: breaking a long 
+line of text into multiple, shorter lines.  Wrapping is available 
+thanks to the `geom_textbox` function of the `ggtext` package [Wilke, 2020]. 
+It can be enabled or disabled in this package via the option 
+`tablesggOpt("allowWrap")`. 
+
+An `Inf` value for `maxwidth` means there is no constraint on maximum 
+width.  (However, in the absence of constraints, the internal algorithm 
+favors widths as close as possible to the natural, unwrapped width of the 
+entry text.)  This is the default for entries in the table body, row and 
+column headers, and row header labels.
+
+An NA value for `maxwidth` means the maximum width will be determined 
+passively from the `maxwidth` values of other entries in the same table 
+column(s).  (It will never be less than `minwidth` however.)  This is the 
+default for table titles and footnotes, where long text should be wrapped 
+to fit widths implied by the other table entries.  For example, in the 
+following the width of table columns (and hence the table) is based on 
+the entries in the body and headers, and the title is automatically 
+wrapped to fit:
+
+```{r, eval=tablesggOpt("allowWrap")}
+tablesggSetOpt(allowWrap=TRUE)
+plt <- plot(iris2_tab, title=paste0("An unnecessarily long title, used to ", 
+            "illustrate automatic text wrapping"))
+```
+```{r, echo=FALSE, eval=tablesggOpt("allowWrap")}
+sz <- pltdSize(plt, units="in")
+```
+```{r, fig.width=sz[1], fig.height=sz[2], eval=tablesggOpt("allowWrap")}
+print(plt)
+```
+```{r, echo=FALSE, eval=!tablesggOpt("allowWrap")}
+cat("[Example skipped because 'tablesggOpt(\"allowWrap\")' is FALSE]\n")
+```
+
+* Setting `maxwidth` to a finite value greater than  `-1` and less 
+than the natural 
+width of an entry's text means the spanned cell(s) will not be wide 
+enough to hold the text without wrapping.  Therefore if option 
+`tablesggOpt("allowWrap")` is `FALSE`, a warning will be given and 
+`maxwidth` will be ignored.
+
+* The wrapping algorithm in `ggtext::geom_textbox` only breaks lines at 
+spaces in the text; it does not hyphenate words or break at punctuation 
+characters.
+
+* The general effect of setting `minwidth` to a non-zero value is 
+to reduce or prevent text wrapping, while the general effect of setting 
+`maxwidth` to NA or a finite value is to encourage wrapping.  Settings 
+for one entry may affect the width and wrapping of other entries, 
+because column widths for the table as a whole must satisfy the 
+constraints for all their entries.
+
+* Text representing `plotmath` expressions cannot be wrapped, so 
+`maxwidth` should be `Inf` or `<= -1` for such entries.
+
+# Appendix D: Tables as graphs {-}
 
 Although it is common to think of tables and graphs as quite different ways 
 of presenting data, a table is in fact a kind of scatterplot.  The key idea 
@@ -1601,14 +1750,22 @@ device.
 # References {-}
 
 Dahl, David B., David Scott, Charles Roosen, Arni Magnusson, and Jonathan 
-Swinton. 2019. _Xtable: Export Tables to Latex or Html_. 
+Swinton. 2019. _xtable: Export Tables to Latex or Html_. 
 `https://CRAN.R-project.org/package=xtable`.
 
-Hugh-Jones, David. 2020. _Huxtable: Easily Create and Style Tables for 
+Hugh-Jones, David. 2020. _huxtable: Easily Create and Style Tables for 
 Latex, Html and Other Formats_. `https://CRAN.R-project.org/package=huxtable`.
 
-Murdoch, Duncan. 2020. _Tables: Formula-Driven Table Generation_. 
+Murdoch, Duncan. 2020. _tables: Formula-Driven Table Generation_.  
 `https://CRAN.R-project.org/package=tables`.
 
-Wickham, Hadley. 2016. _Ggplot2: Elegant Graphics for Data Analysis_. 
+Turlach, Berwin A. 2019. _quadprog: Functions to Solve Quadratic Programming 
+Problems_.  
+`https://CRAN.R-project.org/package=quadprog`.
+
+Wickham, Hadley. 2016. _ggplot2: Elegant Graphics for Data Analysis_. 
 Springer-Verlag New York. `https://ggplot2.tidyverse.org`.
+
+Wilke, Claus O. 2020. _ggtext: Improved Text Rendering Support for
+'ggplot2'_.  
+`https://CRAN.R-project.org/package=ggtext`.

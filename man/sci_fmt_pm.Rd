@@ -1,5 +1,5 @@
 % Auto-generated documentation for function sci_fmt_pm 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{sci_fmt_pm}
 \alias{sci_fmt_pm}
 \title{Convert ASCII Scientific Notation into \code{plotmath} Form }
@@ -24,6 +24,6 @@ are to be treated as \code{plotmath} expressions will begin with the
 characters \code{MATH_}
 }
 \seealso{
-\code{\link{plotmath}}, \code{\link{paste_pm}}
+\code{\link{plotmath}}, \code{\link{paste_text}}
 }
 \keyword{internal}

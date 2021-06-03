@@ -1,5 +1,5 @@
 % Auto-generated documentation for function update.prObj 
-%  2020-11-29 11:21:55 
+%  2021-06-02 11:12:19 
 \name{update.prObj}
 \alias{update.prObj}
 \title{Update Style or Scale for Plot-Ready Table Elements }
@@ -23,9 +23,8 @@ DETAILS.
   }
   \item{scale}{Optional numeric multiplier used to increase or decrease the displayed
 size of table elements, relative to the natural size implied by the
-(updated) style.  The default is to use a value of 1.0 if a \code{style}
-is specified, and to not change the scaling if the style is not being
-updated.
+(possibly updated) style.  The default is to use the current scaling of
+\code{object}.
   }
   \item{...}{Ignored, with a warning.  (Included for compatibility with the generic.)
   }
